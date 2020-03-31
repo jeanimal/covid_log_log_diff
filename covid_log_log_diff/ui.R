@@ -13,6 +13,7 @@ covidByState <- loadAndFormatNytimesCovidPerState()
 
 # Define UI for showing log-log-diff plots of covid cases.
 ui <- fluidPage(
+  titlePanel("Plotting when covid-19 growth trend slows"),
   helpText("This app plots covid-19 trends in a way that makes it easier to ",
            "see if we are flattening the growth.  As long as the points march ",
            "in a straight line, the exponential growth is constant.  QWhen the ",
@@ -31,6 +32,6 @@ ui <- fluidPage(
              a("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",
              href="https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")),
   helpText("The simple shiny app to generate the plots is at: ",
-           a("https://github.com/jeanimal/",
-             href="https://github.com/jeanimal/"))
+           a("https://github.com/jeanimal/covid_log_log_diff/",
+             href="https://github.com/jeanimal/covid_log_log_diff/"))
 )
