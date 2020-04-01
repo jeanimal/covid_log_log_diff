@@ -2,7 +2,7 @@
 # This is the server logic of a Shiny web application.
 #
 # Find out more about building applications with Shiny here:
-# 
+#
 #    http://shiny.rstudio.com/
 #
 
@@ -12,15 +12,37 @@ source("functions.R")
 
 covidByState <- loadAndFormatNytimesCovidPerState()
 
+covidByState<-covidByState %>% 
+  dplyr::filter(!is.na(newCasesPerDay), 
+                !is.na(cases), 
+                newCasesPerDay > 0, 
+                cases > 0)  %>%
+  dplyr::select(-fips,-prevDate,-prevCases)
+
+snippet<-covidByState %>% group_by(date) %>% 
+  summarize(
+    state = "USA",
+    cases = sum(cases),
+    deaths=sum(deaths),
+    newCasesPerDay = sum(newCasesPerDay)
+    )
+
+covidByState = bind_rows(snippet, covidByState)
+
 server <- function(input, output) {
   output$plot1 <- renderPlot({
-    data <- covidByState[which(covidByState$state %in% input$state),]
-    p <- ggplot(data, aes(cases, newCasesPerDay, color=state)) + 
-      geom_point() + scale_x_log10() + scale_y_log10()
+    data <- covidByState[which(covidByState$state %in% input$state), ]
+    p <- ggplot(data, aes(cases, newCasesPerDay+0, color = state)) +
+         theme_bw() +
+         geom_point() + 
+         scale_x_log10() + 
+         scale_y_log10() +
+         geom_smooth(se = FALSE) +
+         theme(legend.position = "none") +
+         labs(x = "Total Cases", y="New Cases Per Day")
     if (input$showDates) {
-      p <- p + geom_text(label=data$date, check_overlap = T)
+      p <- p + geom_text(label = data$date, check_overlap = T)
     }
     p
-    # ggplot(covidByState, aes(cases, newCasesPerDay, color=as.factor(state))) + geom_point() + scale_x_log10() + scale_y_log10()
   })
 }
