@@ -1,6 +1,6 @@
 ---
 title: "Variations on state-level plots"
-author: "jmh"
+author: "Jake Hofman (jhofman)"
 date: '`r Sys.time()`'
 output:
   html_document:
