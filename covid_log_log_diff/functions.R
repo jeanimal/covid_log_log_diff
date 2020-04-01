@@ -7,7 +7,9 @@ library(dplyr)
 # - cases
 # - newCasesPerDay (might be NA)
 loadAndFormatNytimesCovidPerState <- function() {
-  covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', sep=",")
+  covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
+                            sep=",",
+                            stringsAsFactors =FALSE)
   covidByState$date <- as.Date(covidByState$date)
   covidByState2 <- covidByState %>%
     group_by(state) %>%
