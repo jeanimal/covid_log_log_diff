@@ -1,0 +1,125 @@
+---
+title: "Variations on state-level plots"
+author: "Jake Hofman (jhofman)"
+date: '`r Sys.time()`'
+output:
+  html_document:
+    code_folding: hide
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(scales)
+library(plotly)
+library(gganimate)
+
+source('covid_log_log_diff/functions.R')
+```
+
+```{r prep-data-frames}
+covidByState <- loadAndFormatNytimesCovidPerState()
+
+covidByState<-covidByState %>% 
+  dplyr::filter(!is.na(newCasesPerDay), 
+                !is.na(cases), 
+                newCasesPerDay > 0, 
+                cases > 0)  %>%
+  dplyr::select(-fips,-prevDate,-prevCases)
+
+snippet<-covidByState %>% group_by(date) %>% 
+  summarize(
+    state = "USA",
+    cases = sum(cases),
+    deaths=sum(deaths),
+    newCasesPerDay = sum(newCasesPerDay)
+  )
+
+covidByState = bind_rows(snippet, covidByState)
+
+# create loess-smoothed versions of time series for each state
+covidByStateSmoothed <- covidByState %>%
+  filter(state != "USA") %>%
+  group_by(state) %>%
+  do(data.frame(.,
+                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .)))
+```
+
+# Single state, highlighted with background
+```{r single-state-highlighted}
+covidByStateSmoothed %>%
+  filter(state == "New York") %>%
+  ggplot(aes(x=cases, y=smoothed)) +
+  geom_line(data = covidByStateSmoothed, aes(group = state), color = "grey") +
+  geom_line(aes(y = smoothed), color = "red") +
+  scale_x_log10(label = comma) + 
+  scale_y_log10(label = comma) +
+  coord_equal() +
+  theme_minimal() +
+  labs(x = 'Total confirmed cases',
+       y = 'New confirmed cases per day',
+       title = 'Trajectory of COVID-19 cases for New York State',
+       subtitle = 'Grey lines show other U.S. states')
+```
+
+# All states, faceted
+```{r all-states-faceted, fig.width=8, fig.height = 8}
+ggplot(covidByStateSmoothed, aes(x=cases, y=smoothed, group = state)) +
+  geom_line(data = covidByStateSmoothed %>% rename(group = state),
+            aes(x = cases, y = smoothed, group = group), color = "grey") +
+  geom_line(aes(y = smoothed), color = "red") +
+  scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+  scale_y_log10(label = comma) +
+  coord_equal() +
+  labs(x = 'Total confirmed cases',
+       y = 'New confirmed cases per day',
+       title = 'Trajectory of COVID-19 cases in the U.S.') +
+  facet_wrap(~ state) +
+  theme_minimal()
+```
+
+
+
+# Single state, highlighted with background, animated
+```{r single-state-highlighted-animated}
+covidByStateSmoothed %>%
+  filter(state == "New York") %>%
+  ggplot(aes(x=cases, y=smoothed)) +
+  geom_line(data = covidByStateSmoothed, aes(group = state), color = "grey") +
+  geom_line(aes(y = smoothed), color = "red") +
+  geom_label(aes(label = state)) +
+  geom_text(aes(x = 3e4, y = 1.5, label = date)) +
+  scale_x_log10(label = comma) + 
+  scale_y_log10(label = comma) +
+  coord_equal() +
+  theme_minimal() +
+  transition_reveal(date) +
+  labs(x = 'Total confirmed cases',
+       y = 'New confirmed cases per day',
+       title = 'Trajectory of COVID-19 cases for New York State',
+       subtitle = 'Grey lines show other U.S. states')
+```
+
+# All states, animated
+```{r all-states-animated}
+covidByStateSmoothed %>%
+  filter(state != "USA") %>%
+  ggplot(aes(x=cases, y=smoothed, group = state)) +
+  geom_text(aes(label = state)) +
+  geom_text(aes(x = 3e4, y = 1.5, label = date)) +
+  geom_line(aes(y = smoothed)) +
+  scale_x_log10(label = comma) + 
+  scale_y_log10(label = comma) +
+  coord_equal() +
+  transition_reveal(date) +
+  theme_minimal() +
+  labs(x = 'Total confirmed cases',
+       y = 'New confirmed cases per day',
+       title = 'Trajectory of COVID-19 cases in the U.S.')
+```

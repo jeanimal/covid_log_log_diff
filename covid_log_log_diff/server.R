@@ -8,6 +8,7 @@
 
 library(shiny)
 library(ggplot2)
+library(scales)
 source("functions.R")
 
 covidByState <- loadAndFormatNytimesCovidPerState()
@@ -35,11 +36,12 @@ server <- function(input, output) {
     p <- ggplot(data, aes(cases, newCasesPerDay+0, color = state)) +
          theme_bw() +
          geom_point() + 
-         scale_x_log10() + 
-         scale_y_log10() +
+         scale_x_log10(label = comma) + 
+         scale_y_log10(label = comma) +
          geom_smooth(se = FALSE) +
          theme(legend.position = "none") +
-         labs(x = "Total Cases", y="New Cases Per Day")
+         labs(x = "Total Cases", y="New Cases Per Day") +
+         coord_fixed()
     if (input$showDates) {
       p <- p + geom_text(label = data$date, check_overlap = T)
     }
