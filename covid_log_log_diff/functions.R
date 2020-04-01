@@ -1,6 +1,6 @@
 library(dplyr)
 
-# Loads latest nytimes per state covid data.
+# Returns data frame with latest nytimes per state covid data.
 # Output columns include:
 # - date (as a date object)
 # - state (as a string)
