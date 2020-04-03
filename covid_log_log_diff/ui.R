@@ -23,8 +23,7 @@ ui <- fluidPage(
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
   selectInput("state", "State:",
-              unique(c("USA",covidByState$state))),
-  checkboxInput("showDates", "Show Dates", value = FALSE),
+              unique(covidByState$state)), #TODO: Re-add USA
   plotOutput("plot1",
              click = "plot_click"),
   hr(),
