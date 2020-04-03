@@ -96,6 +96,11 @@ covidByStateSmoothMostRecent <- plot_data %>%
   slice(1) %>%
   ungroup()
 
+# ggplot will complain about ignoring an unknown aesthetic
+# this is a side effect of a hack to get tooltips to show up in plotly
+# so supress warnings and then turn them back on after the ggplot calls
+options(warn = -1)
+
 p <- covidByStateSmoothed %>%
   filter(state == selected_state) %>%
   ggplot(aes(x=cases, y=smoothed)) +
@@ -118,6 +123,9 @@ p <- covidByStateSmoothed %>%
        subtitle = 'Grey lines show other U.S. states')
 
   #scale_color_brewer(type = "qualitative", palette = "Pastel1")
+
+# back to regular warning levels
+options(warn = 0)
 
 fig <- ggplotly(p, tooltip = "text") #%>%
   #highlight(on = "plotly_hover", off = "plotly_deselect", color = "black" )
