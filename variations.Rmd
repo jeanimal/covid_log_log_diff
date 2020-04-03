@@ -45,10 +45,11 @@ covidByState = bind_rows(snippet, covidByState)
 
 # create loess-smoothed versions of time series for each state
 covidByStateSmoothed <- covidByState %>%
-  filter(state != "USA") %>%
+  filter(!(state %in% c("USA","Northern Mariana Islands","Virgin Islands","Guam"))) %>%
   group_by(state) %>%
   do(data.frame(.,
-                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .)))
+                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
+  ungroup()
 ```
 
 # Single state, highlighted with background
@@ -66,6 +67,31 @@ covidByStateSmoothed %>%
        y = 'New confirmed cases per day',
        title = 'Trajectory of COVID-19 cases for New York State',
        subtitle = 'Grey lines show other U.S. states')
+```
+
+```{r single-state-highlighted-interactivce}
+
+d <- highlight_key(covidByStateSmoothed, ~state)
+
+p <- covidByStateSmoothed %>%
+  filter(state == "New York") %>%
+  ggplot(aes(x=cases, y=smoothed)) +
+  geom_line(data = d, aes(group = state), color = "grey") +
+  geom_line(aes(y = smoothed), color = "red") +
+  geom_text(aes(x = last(cases), y = last(smoothed), label = state)) +
+  scale_x_log10(label = comma) + 
+  scale_y_log10(label = comma) +
+  coord_equal() +
+  theme_minimal() +
+  labs(x = 'Total confirmed cases',
+       y = 'New confirmed cases per day',
+       title = 'Trajectory of COVID-19 cases for New York State',
+       subtitle = 'Grey lines show other U.S. states')
+
+fig <- ggplotly(p, tooltip = "state") %>%
+  highlight(on = "plotly_hover", off = "plotly_deselect", color = "black" )
+
+fig
 ```
 
 # All states, faceted
