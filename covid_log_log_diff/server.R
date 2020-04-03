@@ -101,6 +101,7 @@ server <- function(input, output) {
     
     # convert to plotly for interactivity
     fig <- ggplotly(p, tooltip = "text")
-    fig
+    fig %>%
+      layout(width = 600, height = 400)
   })
 }
