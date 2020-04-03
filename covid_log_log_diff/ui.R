@@ -25,7 +25,7 @@ ui <- fluidPage(
            ),
   selectInput("state", "State:",
               unique(covidByState$state)), #TODO: Re-add USA
-  plotlyOutput("plot1"),
+  div(plotlyOutput("plot1"), align = "center"),
   hr(),
   helpText("The data has been generously provided by the nytimes: ",
              a("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",
