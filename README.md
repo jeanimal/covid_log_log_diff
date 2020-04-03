@@ -10,7 +10,9 @@ How To Tell If We're Beating COVID-19: https://www.youtube.com/watch?v=54XLXg4fY
 
 # Authors
 
-* Jean Czerlinski Whitmore
+* [Jean Czerlinski Whitmore](https://github.com/jeanimal)
+* [Jake Hofman](https://github.com/jhofman)
+* [Dan Goldstein](https://github.com/dggoldst)
 
 # License
 
