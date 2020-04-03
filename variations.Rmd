@@ -69,16 +69,45 @@ covidByStateSmoothed %>%
        subtitle = 'Grey lines show other U.S. states')
 ```
 
+## Interactive
+
 ```{r single-state-highlighted-interactivce}
 
-d <- highlight_key(covidByStateSmoothed, ~state)
+#d <- highlight_key(covidByStateSmoothed, ~state)
+
+selected_state <- "New York"
+
+background_states <- c("New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+background_states <- setdiff(background_states, selected_state)
+
+plot_data <- covidByStateSmoothed %>%
+  filter(state %in% background_states) %>%
+  ungroup() %>%
+  arrange(state, date) %>%
+  mutate(state = as.factor(state),
+         state = reorder(state, -newCasesPerDay, last))
+  
+d <- plot_data %>%
+  highlight_key(~state)
+
+covidByStateSmoothMostRecent <- plot_data %>%
+  group_by(state) %>%
+  arrange(desc(date)) %>%
+  slice(1) %>%
+  ungroup()
 
 p <- covidByStateSmoothed %>%
-  filter(state == "New York") %>%
+  filter(state == selected_state) %>%
   ggplot(aes(x=cases, y=smoothed)) +
-  geom_line(data = d, aes(group = state), color = "grey") +
-  geom_line(aes(y = smoothed), color = "red") +
-  geom_text(aes(x = last(cases), y = last(smoothed), label = state)) +
+  #geom_line(data = d, aes(group = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), color = "grey") +
+  geom_line(data = d, aes(group = state, color = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), alpha = 0.5) +
+  #geom_point(data = covidByStateSmoothMostRecent, aes(x = cases, y = smoothed, group = state), size = 2, color = "grey", alpha = 0.5) +
+  geom_point(data = covidByStateSmoothMostRecent, aes(x = cases, y = smoothed, group = state, color = state), size = 2, alpha = 0.5) +
+  #geom_point(data = d, aes(x = last(cases), y = last(smoothed), text = sprintf('Foo')), size = 2, color = "red", alpha = 0.5) +
+  geom_line(aes(y = smoothed), color = "black") +
+  geom_point(aes(x = last(cases), y = last(smoothed)), size = 2, color = "black", alpha = 0.5) +
+  geom_text(aes(x = last(cases), y = 1.2*last(smoothed), label = state)) +
+  geom_point(aes(y = smoothed, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), size = 0, alpha = 0) +
   scale_x_log10(label = comma) + 
   scale_y_log10(label = comma) +
   coord_equal() +
@@ -88,8 +117,10 @@ p <- covidByStateSmoothed %>%
        title = 'Trajectory of COVID-19 cases for New York State',
        subtitle = 'Grey lines show other U.S. states')
 
-fig <- ggplotly(p, tooltip = "state") %>%
-  highlight(on = "plotly_hover", off = "plotly_deselect", color = "black" )
+  #scale_color_brewer(type = "qualitative", palette = "Pastel1")
+
+fig <- ggplotly(p, tooltip = "text") #%>%
+  #highlight(on = "plotly_hover", off = "plotly_deselect", color = "black" )
 
 fig
 ```
