@@ -54,7 +54,7 @@ background_states <- c("New York", "New Jersey", "California", "Michigan", "Loui
 
 
 server <- function(input, output) {
-  output$plot1 <- renderPlot({
+  output$plot1 <- renderPlotly({
     selected_state <- input$state
     background_states <- setdiff(background_states, selected_state)
     
@@ -74,6 +74,11 @@ server <- function(input, output) {
       slice(1) %>%
       ungroup()
     
+    # ggplot will complain about ignoring an unknown aesthetic
+    # this is a side effect of a hack to get tooltips to show up in plotly
+    # so supress warnings as a workaround
+    
+    suppressWarnings(
     p <- covidByStateSmoothed %>%
       filter(state == selected_state) %>%
       ggplot(aes(x=cases, y=smoothed)) +
@@ -91,9 +96,11 @@ server <- function(input, output) {
       labs(x = 'Total confirmed cases',
            y = 'New confirmed cases per day',
            title = paste0('Trajectory of COVID-19 cases for ', selected_state))
-    p
-    # TODO: Get plotly working with tooltips.
-    # fig <- ggplotly(p, tooltip = "text")
-    # fig
+    )
+    #p
+    
+    # convert to plotly for interactivity
+    fig <- ggplotly(p, tooltip = "text")
+    fig
   })
 }
