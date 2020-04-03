@@ -7,6 +7,7 @@
 #
 
 library(shiny)
+library(plotly)
 source("functions.R")
 
 covidByState <- loadAndFormatNytimesCovidPerState()
