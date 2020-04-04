@@ -100,8 +100,6 @@ server <- function(input, output) {
     #p
     
     # convert to plotly for interactivity
-    fig <- ggplotly(p, tooltip = "text")
-    fig %>%
-      layout(width = 600, height = 400)
+    fig <- ggplotly(p, tooltip = "text") %>% config(displayModeBar = F) %>% layout(xaxis=list(fixedrange=TRUE)) %>% layout(yaxis=list(fixedrange=TRUE))
   })
 }
