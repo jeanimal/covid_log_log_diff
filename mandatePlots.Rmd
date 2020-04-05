@@ -1,0 +1,140 @@
+---
+title: "State mandate plots"
+author: "Jean Whitmore"
+date: "4/4/2020"
+output: html_document
+---
+
+This combines data on state mandates with cases to help visualize the affect, if any, of these mandates on the growth of cases.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)
+library(scales)
+library(ggplot2)
+
+source('covid_log_log_diff/functions.R')
+```
+
+## Loading data
+
+```{r covid-cases-by-state}
+covidByState <- loadAndFormatNytimesCovidPerState()
+```
+
+```{r mandates-by-state}
+mandatesByState <- read.csv2('https://raw.githubusercontent.com/jeanimal/covid_log_log_diff/master/covid_log_log_diff/data/covid_state_mandates.csv', sep=",", stringsAsFactors=FALSE, na.strings=c(""))
+mandatesByState$stayhome <- as.Date(mandatesByState$stayhome)
+mandatesByState$schools <- as.Date(mandatesByState$schools)
+mandatesByState$nonessential <- as.Date(mandatesByState$nonessential)
+mandatesByState$travel <- as.Date(mandatesByState$travel)
+```
+
+## Munging data
+
+```{r smooth-covid-by-state}
+covidByState<-covidByState %>% 
+  dplyr::filter(!is.na(newCasesPerDay), 
+                !is.na(cases), 
+                newCasesPerDay > 0, 
+                cases > 0)  %>%
+  dplyr::select(-prevDate,-prevCases)
+
+# create loess-smoothed versions of time series for each state
+covidByStateSmoothed <- covidByState %>%
+  filter(!(state %in% c("USA","Northern Mariana Islands","Virgin Islands","Guam"))) %>%
+  group_by(state) %>%
+  do(data.frame(.,
+                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
+  ungroup()
+```
+
+## Plot helpers
+
+```{r function-join-mandates-with-cases}
+# joinMandatesWithCases joins mandateByState with the case data in covidByState
+# It uses the state and date in covidByState for the state at mandateColName date.
+# mandatesByState should have columns:
+# - state
+# - [mandateColName]
+# covidByState should have columns:
+# - state
+# - date
+# - whatever case info you want
+joinMandatesWithCases <- function(mandatesByState, mandateColName, covidByState) {
+  mandatesByStateWithCases <- mandatesByState[, c("state", mandateColName)]
+  # The c() function messes up evaluation so I use a hacky renaming.
+  names(mandatesByStateWithCases)[[2]] <- "date"
+  mandatesByStateWithCases <- mandatesByStateWithCases %>% left_join(covidByState, by=c("state", "date"))
+  names(mandatesByStateWithCases)[[2]] <- mandateColName
+  mandatesByStateWithCases
+}
+```
+
+
+```{r function-faceted-plot-with-mandates}
+# Makes a faceted plot of case growth with a dot representing the start of a mandate.
+# Both covidByStateSmoothed and mandatesByStateWithCases are data frames with columns
+# - cases
+# - smoothed
+# - state
+# However, while covidByStateSmoothed should have data for many dates,
+# mandatesByStateWithCases should have data for only one date, the mandate start date.
+# The final plot does *not* have dates on an axis, which is why the association between
+# these data frames is indirect.
+facetedPlotWithMandates <- function(covidByStateSmoothed, mandatesByStateWithCases, mandateName) {
+  ggplot(covidByStateSmoothed, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = covidByStateSmoothed %>% rename(group = state),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "red") +
+    geom_point(data=mandatesByStateWithCases, aes(x=cases, y=smoothed)) +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = 'Trajectory of COVID-19 cases in the U.S.',
+         subtitle = paste0('Dot is start of ', mandateName)) +
+    facet_wrap(~ state) +
+    theme_minimal()
+}
+
+```
+
+
+## Plots
+
+The dot for the start of a mandate is plotted by looking up the number of cases and new
+cases on that day.
+
+In general, we would expect a delay of 1-2 weeks between the date an order starts and a change in cases because the virus incubation period is at least that long.
+
+## Temporary
+
+Temporary: Remove states I do not have any mandate data for.
+```{r}
+background_states <- c("New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+covidByStateSmoothed <- covidByStateSmoothed %>%
+filter(state %in% c("Alabama", "Alaska", "Arizona", "Tennessee", "New York", background_states))
+```
+
+
+## The effect of Stay at Home orders
+
+```{r plot-stay-at-home, echo=FALSE, fig.width=8, fig.height = 8}
+facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "stayhome", covidByStateSmoothed), "staying at home")
+```
+
+
+## The effect of school closures
+
+```{r plot-school, echo=FALSE, fig.width=8, fig.height = 8}
+facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "schools", covidByStateSmoothed), "school closures")
+```
+
+```{r plot-nonessential, echo=FALSE, fig.width=8, fig.height = 8}
+facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "nonessential", covidByStateSmoothed), "closing non-essential services")
+```
