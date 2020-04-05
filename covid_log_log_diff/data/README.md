@@ -4,8 +4,8 @@ https://covid19.healthdata.org/projections
 There are four categories tracked.
 - Stay at home order, called "stayhome" in the csv
 - Educational facilities closed, called "schools" in the csv
-- Non-essential services closed, called "closed" in the csv
-- Travel severly limited, called "travel" in the csv
+- Non-essential services closed, called "nonessential" in the csv
+- Travel severely limited, called "travel" in the csv
 
 
 The website explains:
