@@ -1,14 +1,22 @@
 ---
 title: "State mandate plots"
-author: "Jean Whitmore"
+author: "Jean Czerlinski Whitmore (jeanimal)"
 date: "4/4/2020"
-output: html_document
+output:
+  html_document:
+    code_folding: hide
+    keep_md: true
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
 ---
 
 This combines data on state mandates with cases to help visualize the affect, if any, of these mandates on the growth of cases.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+  fig.path = "README_figs/README-"
+)
 ```
 
 ```{r load-libraries, echo=FALSE}
