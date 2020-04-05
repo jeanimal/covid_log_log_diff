@@ -13,6 +13,7 @@ There are four categories of mandates tracked:
 - Non-essential services closed, called "nonessential" in the csv
 - Travel severely limited, called "travel" in the csv
 
+The data also includes fips geographic codes: https://transition.fcc.gov/oet/info/maps/census/fips/fips.txt
 
 The healthdata.org website explains:
 
