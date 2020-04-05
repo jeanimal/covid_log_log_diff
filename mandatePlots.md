@@ -13,27 +13,52 @@ output:
 
 This combines data on state mandates with cases to help visualize the affect, if any, of these mandates on the growth of cases.
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-  fig.path = "mandate_figs/mandate-"
-)
+
+
+
+```
+## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
-```{r load-libraries, echo=FALSE}
-library(tidyverse)
-library(scales)
-library(ggplot2)
+```
+## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.5
+## ✔ tidyr   1.0.2     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.5.0
+```
 
-source('covid_log_log_diff/functions.R')
+```
+## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```
+## 
+## Attaching package: 'scales'
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+```
+
+```
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
 ```
 
 ## Loading data
 
-```{r covid-cases-by-state}
+
+```r
 covidByState <- loadAndFormatNytimesCovidPerState()
 ```
 
-```{r mandates-by-state}
+
+```r
 mandatesByState <- read.csv2('https://raw.githubusercontent.com/jeanimal/covid_log_log_diff/master/covid_log_log_diff/data/covid_state_mandates.csv', sep=",", stringsAsFactors=FALSE, na.strings=c(""))
 mandatesByState$stayhome <- as.Date(mandatesByState$stayhome)
 mandatesByState$schools <- as.Date(mandatesByState$schools)
@@ -43,7 +68,8 @@ mandatesByState$travel <- as.Date(mandatesByState$travel)
 
 ## Munging data
 
-```{r smooth-covid-by-state}
+
+```r
 covidByState<-covidByState %>% 
   dplyr::filter(!is.na(newCasesPerDay), 
                 !is.na(cases), 
@@ -62,7 +88,8 @@ covidByStateSmoothed <- covidByState %>%
 
 ## Plot helpers
 
-```{r function-join-mandates-with-cases}
+
+```r
 # joinMandatesWithCases joins mandateByState with the case data in covidByState
 # It uses the state and date in covidByState for the state at mandateColName date.
 # mandatesByState should have columns:
@@ -93,7 +120,8 @@ In general, we would expect a delay of 1-2 weeks between the date an order start
 ## Temporary
 
 Temporary: Remove states I do not have any mandate data for.
-```{r remove-states-without-mandate-data}
+
+```r
 background_states <- c("New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
 covidByStateSmoothed <- covidByStateSmoothed %>%
 filter(state %in% c("Alabama", "Alaska", "Arizona", "Tennessee", "New York", background_states))
@@ -108,27 +136,16 @@ Recall that a straight line up and to the right represents exponential growth.  
 
 My summary: It seems rare that a state's covid case line plot flattens after a mandate.  Tennessee and NY have that pattern but not the others.
 
-```{r plot-all-mandates, echo=FALSE, fig.width=8, fig.height = 8}
-mandateStayHome <- joinMandatesWithCases(mandatesByState, "stayhome", covidByStateSmoothed)
-mandateSchools<- joinMandatesWithCases(mandatesByState, "schools", covidByStateSmoothed)
-mandateNonessential<- joinMandatesWithCases(mandatesByState, "nonessential", covidByStateSmoothed)
-ggplot(covidByStateSmoothed, aes(x=cases, y=smoothed, group = state)) +
-    geom_line(data = covidByStateSmoothed %>% rename(group = state),
-              aes(x = cases, y = smoothed, group = group), color = "grey") +
-    geom_line(aes(y = smoothed), color = "black") +
-    geom_jitter(data=mandateStayHome, aes(x=cases, y=smoothed, color="stayHome")) +
-    geom_jitter(data=mandateSchools, aes(x=cases, y=smoothed, color="closeSchool")) +
-    geom_jitter(data=mandateNonessential, aes(x=cases, y=smoothed, color="closeNonessential")) +
-    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
-    scale_y_log10(label = comma) +
-    coord_equal() +
-    labs(x = 'Total confirmed cases',
-         y = 'New confirmed cases per day',
-         title = 'Trajectory of COVID-19 cases in the U.S.',
-         subtitle = paste0('Dots are start of mandates')) +
-    facet_wrap(~ state) +
-    theme_minimal()
+
 ```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
+```
+
+![](mandate_figs/mandate-plot-all-mandates-1.png)<!-- -->
 
 Above I put all three mandates on one plot.  Below I do one mandate at a time.
 
@@ -136,7 +153,8 @@ Above I put all three mandates on one plot.  Below I do one mandate at a time.
 
 I created a helper function to generate the facet plots.
 
-```{r function-faceted-plot-with-mandates}
+
+```r
 # Makes a faceted plot of case growth with a dot representing the start of a mandate.
 # Both covidByStateSmoothed and mandatesByStateWithCases are data frames with columns
 # - cases
@@ -162,22 +180,25 @@ facetedPlotWithMandates <- function(covidByStateSmoothed, mandatesByStateWithCas
     facet_wrap(~ state) +
     theme_minimal()
 }
-
 ```
 
 Now pass the helper function the data for each mandate.
 
-```{r plot-stay-at-home, echo=FALSE, fig.width=8, fig.height = 8}
-facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "stayhome", covidByStateSmoothed), "staying at home")
+
 ```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+![](mandate_figs/mandate-plot-stay-at-home-1.png)<!-- -->
 
 
 ## The effect of school closures
 
-```{r plot-school, echo=FALSE, fig.width=8, fig.height = 8}
-facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "schools", covidByStateSmoothed), "school closures")
+![](mandate_figs/mandate-plot-school-1.png)<!-- -->
+
+
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
 ```
 
-```{r plot-nonessential, echo=FALSE, fig.width=8, fig.height = 8}
-facetedPlotWithMandates(covidByStateSmoothed, joinMandatesWithCases(mandatesByState, "nonessential", covidByStateSmoothed), "closing non-essential services")
-```
+![](mandate_figs/mandate-plot-nonessential-1.png)<!-- -->
