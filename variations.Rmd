@@ -105,7 +105,7 @@ p <- covidByStateSmoothed %>%
   filter(state == selected_state) %>%
   ggplot(aes(x=cases, y=smoothed)) +
   #geom_line(data = d, aes(group = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), color = "grey") +
-  geom_point(data = d, aes(group = state, color = state), size = 0.3, alpha = 1) +
+  geom_point(data = d, aes(group = state, color = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), size = 0.3, alpha = 1) +
   geom_line(data = d, aes(group = state, color = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), alpha = 0.5) +
   #geom_point(data = covidByStateSmoothMostRecent, aes(x = cases, y = smoothed, group = state), size = 2, color = "grey", alpha = 0.5) +
   geom_point(data = covidByStateSmoothMostRecent, aes(x = cases, y = smoothed, group = state, color = state), size = 2, alpha = 0.5) +
