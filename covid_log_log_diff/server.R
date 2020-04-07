@@ -82,12 +82,13 @@ server <- function(input, output) {
     p <- covidByStateSmoothed %>%
       filter(state == selected_state) %>%
       ggplot(aes(x=cases, y=smoothed)) +
-      geom_line(data = d, aes(group = state, color = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), alpha = 0.5) +
+      geom_point(data = d, aes(group = state, color = state, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), size = 0.3, alpha = 1) +
+      geom_line(data = d, aes(group = state, color = state), alpha = 0.5) +
       geom_point(data = covidByStateSmoothMostRecent, aes(x = cases, y = smoothed, group = state, color = state), size = 2, alpha = 0.5) +
       geom_line(aes(y = smoothed), color = "black") +
       geom_point(aes(x = last(cases), y = last(smoothed)), size = 2, color = "black", alpha = 0.5) +
       geom_text(aes(x = last(cases), y = 1.3*last(smoothed), label = state)) +
-      geom_point(aes(y = smoothed, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))), size = 0, alpha = 0) +
+      geom_point(aes(y = smoothed, text = sprintf('%s on %s:\n%s total cases\n%s new cases', state, date, comma(cases), comma(newCasesPerDay))),size = 0.3, alpha = 1) +
       scale_x_log10(label = comma) + 
       scale_y_log10(label = comma) +
       coord_equal() +
