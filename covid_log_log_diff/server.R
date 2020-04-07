@@ -34,7 +34,7 @@ covidByState = bind_rows(snippet, covidByState)
 
 # create loess-smoothed versions of time series for each state
 covidByStateSmoothed <- covidByState %>%
-  filter(!(state %in% c("USA","Northern Mariana Islands","Virgin Islands","Guam"))) %>%
+  filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
   group_by(state) %>%
   do(data.frame(.,
                 smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
@@ -50,7 +50,7 @@ covidByStateSmoothed %>%
   coord_equal() +
   theme_minimal()
 
-background_states <- c("New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
 
 
 server <- function(input, output) {
