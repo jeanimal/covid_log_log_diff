@@ -24,7 +24,7 @@ ui <- fluidPage(
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
   selectInput("state", "State:",
-              unique(c("USA", covidByState$state))),
+              unique(covidByState$state)),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE),
   hr(),
   helpText("The data has been generously provided by the nytimes: ",

@@ -7,6 +7,25 @@ library(dplyr)
 # - cases
 # - newCasesPerDay (might be NA)
 loadAndFormatNytimesCovidPerState <- function() {
+  data <-read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM", stringsAsFactors =FALSE)
+  data$date <- ISOdate(data$year, data$month, data$day)
+  # Their 'cases' column is actually new cases.
+  data$newCasesPerDay <- data$cases
+  data <- data %>%
+    group_by(geoId) %>%
+    arrange(date, .by_group = TRUE) %>%
+    mutate(totalCases = cumsum(newCasesPerDay))
+  data$cases <- data$totalCases
+  data$fips <- data$geoId
+  data$state <- data$countriesAndTerritories
+  data <- data %>%
+    group_by(geoId) %>%
+    filter(n() >= 30)
+    # filter((state %in% c("Afghanistan", "China", "Germany", "Italy", "France")))
+  data
+}
+
+loadAndFormatNytimesCovidPerStateOld <- function() {
   covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
                             sep=",",
                             stringsAsFactors =FALSE)
@@ -18,3 +37,4 @@ loadAndFormatNytimesCovidPerState <- function() {
   covidByState2$newCasesPerDay <- (covidByState2$cases - covidByState2$prevCases) / as.numeric(covidByState2$date - covidByState2$prevDate)
   covidByState2
 }
+
