@@ -18,11 +18,11 @@ loadAndFormatNytimesCovidPerState <- function() {
   data$cases <- data$totalCases
   data$fips <- data$geoId
   data$state <- data$countriesAndTerritories
+  # Drop countries with too few rows of data.
   data <- data %>%
     group_by(geoId) %>%
     filter(n() >= 30)
-    # filter((state %in% c("Afghanistan", "China", "Germany", "Italy", "France")))
-  data
+  arrange(data, state, date)
 }
 
 loadAndFormatNytimesCovidPerStateOld <- function() {

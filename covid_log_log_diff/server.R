@@ -27,15 +27,15 @@ covidByState<-covidByState %>%
   dplyr::filter(n() >= 10)
 
 
-# snippet<-covidByState %>% group_by(date) %>%
-#   summarize(
-#     state = "USA",
-#     cases = sum(cases),
-#     deaths=sum(deaths),
-#     newCasesPerDay = sum(newCasesPerDay)
-#     )
-# 
-# covidByState = bind_rows(snippet, covidByState)
+snippet<-covidByState %>% group_by(date) %>%
+  summarize(
+    state = "ALL",
+    cases = sum(cases),
+    deaths=sum(deaths),
+    newCasesPerDay = sum(newCasesPerDay)
+    )
+
+covidByState = bind_rows(snippet, covidByState)
 
 # create loess-smoothed versions of time series for each state
 covidByStateSmoothed <- covidByState %>%
