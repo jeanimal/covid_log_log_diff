@@ -69,7 +69,7 @@ cleanAndSmooth <- function(covidByState) {
     dplyr::filter(n() >= 10)
   # create loess-smoothed versions of time series for each state
   covidByStateSmoothed <- covidByState %>%
-    filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
+  #  filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
     group_by(state) %>%
     do(data.frame(.,
                   smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
