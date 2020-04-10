@@ -79,7 +79,7 @@ cleanAndSmooth <- function(covidByState) {
 
 loadCovidDatabyGeo <- function(geo) {
   if (geo=="US") {
-    df <- loadAndFormatNytimesCovidPerStateOld()
+    df <- loadAndFormatNytimesCovidPerState()
     background_states <- c("_ALL_", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
     list(covidByGeo=cleanAndSmooth(df), background_geos=background_states)
   } else if (geo=="WORLD") {
