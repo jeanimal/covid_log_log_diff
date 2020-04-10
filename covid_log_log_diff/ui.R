@@ -24,7 +24,7 @@ ui <- fluidPage(
            ),
   selectInput("geo", "Geo:",
               c("US", "WORLD", "US_COUNTY")),
-  selectInput("state", "State/Country",
+  selectInput("state", "State/Country/County",
               c("_ALL_")),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
   hr(),
