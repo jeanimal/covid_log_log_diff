@@ -28,10 +28,13 @@ ui <- fluidPage(
               c("_ALL_")),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
   hr(),
-  helpText("The data has been generously provided by the nytimes: ",
+  helpText("US state data is from the nytimes: ",
              a("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",
              href="https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")),
-  helpText("The simple shiny app to generate the plots is at: ",
+  helpText("World country data is from the ECDC:",
+           a("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv",
+             href="https://opendata.ecdc.europa.eu/covid19/casedistribution/csv")),
+  helpText("The shiny app to generate the plots is at: ",
            a("https://github.com/jeanimal/covid_log_log_diff/",
              href="https://github.com/jeanimal/covid_log_log_diff/"))
 )
