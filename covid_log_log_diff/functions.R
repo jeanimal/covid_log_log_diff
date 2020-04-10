@@ -37,4 +37,3 @@ loadAndFormatNytimesCovidPerStateOld <- function() {
   covidByState2$newCasesPerDay <- (covidByState2$cases - covidByState2$prevCases) / as.numeric(covidByState2$date - covidByState2$prevDate)
   covidByState2
 }
-
