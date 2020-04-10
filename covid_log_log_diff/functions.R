@@ -47,7 +47,7 @@ loadCovidPerUSCounty <- function() {
   # That should make it unique and also it will work in all other functions.
   # (Save the original state in "us_state")
   data$us_state <- data$state
-  data$state <- paste0(data$us_state, "_", data$county)
+  data$state <- paste0(data$us_state, ": ", data$county)
   # Only keep counties with > 10 rows of data.
   data <- data %>%
     group_by(state) %>%
@@ -113,7 +113,7 @@ loadCovidDatabyGeo <- function(geo) {
     list(covidByGeo=cleanAndSmooth(df), background_geos=background_geos)
   } else if (geo=="US_COUNTY") {
     df <- loadCovidPerUSCounty()
-    background_geos <- c("_ALL_", "New York_New York City")
+    background_geos <- c("_ALL_", "New York: New York City")
     list(covidByGeo=cleanAndSmooth(df), background_geos=background_geos)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
