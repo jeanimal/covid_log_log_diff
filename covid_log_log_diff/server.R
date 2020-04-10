@@ -29,13 +29,17 @@ getOutputListByGeo <- function(geo) {
 server <- function(input, output, session) {
   observe({
     covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
-    updateSelectInput(session, "state", label = "State:", choices = unique(covidByStateSmoothed$state))
+    updateSelectInput(session, "state", label = "State/Country:", choices = unique(covidByStateSmoothed$state))
   })
   output$plot1 <- renderPlotly({
     covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
     background_states <- getOutputListByGeo(input$geo)$background_geos
     
     selected_state <- input$state
+    if (!selected_state %in% unique(covidByStateSmoothed$state)) {
+      # Don't plot yet because "state" select input is still loading.
+      return()
+    }
     background_states <- setdiff(background_states, selected_state)
     
     plot_data <- covidByStateSmoothed %>%
