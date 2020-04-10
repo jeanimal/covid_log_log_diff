@@ -21,7 +21,7 @@ loadAndFormatNytimesCovidPerState <- function() {
   # Drop countries with too few rows of data.
   data <- data %>%
     group_by(geoId) %>%
-    filter(n() >= 30)
+    filter(n() >= 10)
   arrange(data, state, date)
 }
 

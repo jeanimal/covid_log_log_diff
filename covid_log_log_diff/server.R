@@ -57,7 +57,7 @@ covidByStateSmoothed %>%
 
 background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
 
-background_states <- c("Italy", "Germany", "China")
+background_states <- c("Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
 
 server <- function(input, output, session) {
   observe({
