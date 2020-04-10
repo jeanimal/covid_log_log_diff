@@ -12,30 +12,28 @@ library(plotly)
 library(scales)
 source("functions.R")
 
-
+# Pre-load data.
 outputListUS <- loadCovidDatabyGeo("US")
 outputListWorld <- loadCovidDatabyGeo("WORLD")
-#covidByState <- outputList$covidByGeo
-#background_states <- outputList$background_geos
-###
+
+getOutputListByGeo <- function(geo) {
+  if (geo == "US") {
+    return(outputListUS)
+  } else if (geo == "WORLD") {
+    return(outputListWorld)
+  } else {
+    stop(paste0("Unrecognized geo: ", geo))
+  }
+}
 
 server <- function(input, output, session) {
   observe({
-    if (input$geo == "US") {
-      covidByStateSmoothed <- outputListUS$covidByGeo
-    } else if (input$geo == "WORLD") {
-      covidByStateSmoothed <- outputListWorld$covidByGeo
-    }
+    covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
     updateSelectInput(session, "state", label = "State:", choices = unique(covidByStateSmoothed$state))
   })
   output$plot1 <- renderPlotly({
-    if (input$geo == "US") {
-      covidByStateSmoothed <- outputListUS$covidByGeo
-      background_states <- outputListUS$background_geos
-    } else if (input$geo == "WORLD") {
-      covidByStateSmoothed <- outputListWorld$covidByGeo
-      background_states <- outputListWorld$background_geos
-    }
+    covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
+    background_states <- getOutputListByGeo(input$geo)$background_geos
     
     selected_state <- input$state
     background_states <- setdiff(background_states, selected_state)
