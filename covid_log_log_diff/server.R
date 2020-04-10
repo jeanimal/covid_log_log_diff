@@ -12,43 +12,31 @@ library(plotly)
 library(scales)
 source("functions.R")
 
-outputList <- loadCovidDatabyGeo("WORLD")
-covidByState <- outputList$covidByGeo
-background_states <- outputList$background_geos
 
-covidByState<-covidByState %>% 
-  dplyr::filter(!is.na(newCasesPerDay), 
-                !is.na(cases), 
-                newCasesPerDay > 0, 
-                cases > 0)
-
-snippet<-covidByState %>% group_by(date) %>%
-  summarize(
-    state = "ALL",
-    cases = sum(cases),
-    deaths=sum(deaths),
-    newCasesPerDay = sum(newCasesPerDay)
-    )
-
-covidByState = bind_rows(snippet, covidByState)
-
-# Need a minimum number of days of data for smoothing.
-covidByState<-covidByState %>%
-  dplyr::group_by(state) %>%
-  dplyr::filter(n() >= 10)
-# create loess-smoothed versions of time series for each state
-covidByStateSmoothed <- covidByState %>%
-  filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
-  group_by(state) %>%
-  do(data.frame(.,
-                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
-  ungroup()
+outputListUS <- loadCovidDatabyGeo("US")
+outputListWorld <- loadCovidDatabyGeo("WORLD")
+#covidByState <- outputList$covidByGeo
+#background_states <- outputList$background_geos
+###
 
 server <- function(input, output, session) {
   observe({
-      updateSelectInput(session, "state", label = "State:", choices = unique(covidByState$state))
+    if (input$geo == "US") {
+      covidByStateSmoothed <- outputListUS$covidByGeo
+    } else if (input$geo == "WORLD") {
+      covidByStateSmoothed <- outputListWorld$covidByGeo
+    }
+    updateSelectInput(session, "state", label = "State:", choices = unique(covidByStateSmoothed$state))
   })
   output$plot1 <- renderPlotly({
+    if (input$geo == "US") {
+      covidByStateSmoothed <- outputListUS$covidByGeo
+      background_states <- outputListUS$background_geos
+    } else if (input$geo == "WORLD") {
+      covidByStateSmoothed <- outputListWorld$covidByGeo
+      background_states <- outputListWorld$background_geos
+    }
+    
     selected_state <- input$state
     background_states <- setdiff(background_states, selected_state)
     

@@ -38,23 +38,55 @@ loadAndFormatNytimesCovidPerState <- function() {
   covidByState2
 }
 
-background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
-
-background_states <- c("Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
-
-
+# Takes a data frame covidByState and returns a cleaned and smoothed version.
+# Also adds a new "state" called ALL which is the sum.
+# Assumes columns
+# - date
+# - state
+# - cases
+# - newCasesPerDay
+# - deaths
+cleanAndSmooth <- function(covidByState) {
+  covidByState<-covidByState %>%
+    dplyr::filter(!is.na(newCasesPerDay),
+                  !is.na(cases),
+                  newCasesPerDay > 0,
+                  cases > 0)
+  
+  snippet<-covidByState %>% group_by(date) %>%
+    summarize(
+      state = "_ALL_",
+      cases = sum(cases),
+      deaths=sum(deaths),
+      newCasesPerDay = sum(newCasesPerDay)
+    )
+  
+  covidByState = bind_rows(snippet, covidByState)
+  
+  # Need a minimum number of days of data for smoothing.
+  covidByState<-covidByState %>%
+    dplyr::group_by(state) %>%
+    dplyr::filter(n() >= 10)
+  # create loess-smoothed versions of time series for each state
+  covidByStateSmoothed <- covidByState %>%
+    filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
+    group_by(state) %>%
+    do(data.frame(.,
+                  smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
+    ungroup()
+  covidByStateSmoothed
+}
 
 loadCovidDatabyGeo <- function(geo) {
   if (geo=="US") {
     df <- loadAndFormatNytimesCovidPerStateOld()
-    background_states <- c("ALL", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
-    list(covidByGeo=df, background_geos=background_states)
+    background_states <- c("_ALL_", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+    list(covidByGeo=cleanAndSmooth(df), background_geos=background_states)
   } else if (geo=="WORLD") {
     df <- loadCovidPerCountry()
-    background_geos <- c("ALL", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
-    list(covidByGeo=df, background_geos=background_geos)
+    background_geos <- c("_ALL_", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
+    list(covidByGeo=cleanAndSmooth(df), background_geos=background_geos)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }
 }
-

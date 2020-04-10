@@ -21,8 +21,10 @@ ui <- fluidPage(
   helpText(a("How To Tell If We're Beating COVID-19", target="_blank",
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
+  selectInput("geo", "Geo:",
+              c("US", "WORLD")),
   selectInput("state", "State:",
-              c("ALL")),
+              c("_ALL_")),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE),
   hr(),
   helpText("The data has been generously provided by the nytimes: ",
