@@ -12,23 +12,15 @@ library(plotly)
 library(scales)
 source("functions.R")
 
-#covidByState <- loadAndFormatNytimesCovidPerState()
 outputList <- loadCovidDatabyGeo("WORLD")
 covidByState <- outputList$covidByGeo
 background_states <- outputList$background_geos
 
-# TODO: Move data processing into functions.R.
 covidByState<-covidByState %>% 
   dplyr::filter(!is.na(newCasesPerDay), 
                 !is.na(cases), 
                 newCasesPerDay > 0, 
                 cases > 0)
-
-# Need a minimum number of days of data for smoothing.
-covidByState<-covidByState %>%
-  dplyr::group_by(state) %>%
-  dplyr::filter(n() >= 10)
-
 
 snippet<-covidByState %>% group_by(date) %>%
   summarize(
@@ -40,6 +32,10 @@ snippet<-covidByState %>% group_by(date) %>%
 
 covidByState = bind_rows(snippet, covidByState)
 
+# Need a minimum number of days of data for smoothing.
+covidByState<-covidByState %>%
+  dplyr::group_by(state) %>%
+  dplyr::filter(n() >= 10)
 # create loess-smoothed versions of time series for each state
 covidByStateSmoothed <- covidByState %>%
   filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
@@ -47,16 +43,6 @@ covidByStateSmoothed <- covidByState %>%
   do(data.frame(.,
                 smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
   ungroup()
-
-covidByStateSmoothed %>%
-  filter(state == "New York") %>%
-  ggplot(aes(x=cases, y=smoothed)) +
-  geom_line(data = covidByStateSmoothed, aes(group = state), color = "grey") +
-  geom_line(aes(y = smoothed), color = "red") +
-  scale_x_log10(label = comma) + 
-  scale_y_log10(label = comma) +
-  coord_equal() +
-  theme_minimal()
 
 server <- function(input, output, session) {
   observe({
