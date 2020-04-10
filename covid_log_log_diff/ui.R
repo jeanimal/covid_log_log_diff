@@ -8,9 +8,8 @@
 
 library(shiny)
 library(plotly)
+library(shinycssloaders)
 source("functions.R")
-
-covidByState <- loadAndFormatNytimesCovidPerState()
 
 # Define UI for showing log-log-diff plots of covid cases.
 ui <- fluidPage(
@@ -23,9 +22,11 @@ ui <- fluidPage(
   helpText(a("How To Tell If We're Beating COVID-19", target="_blank",
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
-  selectInput("state", "State:",
-              unique(c("USA", covidByState$state))),
-  plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE),
+  selectInput("geo", "Geo:",
+              c("US", "WORLD")),
+  selectInput("state", "State/Country",
+              c("_ALL_")),
+  plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
   hr(),
   helpText("The data has been generously provided by the nytimes: ",
              a("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",

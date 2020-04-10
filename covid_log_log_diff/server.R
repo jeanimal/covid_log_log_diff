@@ -12,50 +12,34 @@ library(plotly)
 library(scales)
 source("functions.R")
 
-covidByState <- loadAndFormatNytimesCovidPerState()
+# Pre-load data.
+outputListUS <- loadCovidDatabyGeo("US")
+outputListWorld <- loadCovidDatabyGeo("WORLD")
 
-# TODO: Move data processing into functions.R.
-covidByState<-covidByState %>% 
-  dplyr::filter(!is.na(newCasesPerDay), 
-                !is.na(cases), 
-                newCasesPerDay > 0, 
-                cases > 0)  %>%
-  dplyr::select(-fips,-prevDate,-prevCases)
+getOutputListByGeo <- function(geo) {
+  if (geo == "US") {
+    return(outputListUS)
+  } else if (geo == "WORLD") {
+    return(outputListWorld)
+  } else {
+    stop(paste0("Unrecognized geo: ", geo))
+  }
+}
 
-snippet<-covidByState %>% group_by(date) %>% 
-  summarize(
-    state = "USA",
-    cases = sum(cases),
-    deaths=sum(deaths),
-    newCasesPerDay = sum(newCasesPerDay)
-    )
-
-covidByState = bind_rows(snippet, covidByState)
-
-# create loess-smoothed versions of time series for each state
-covidByStateSmoothed <- covidByState %>%
-  filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
-  group_by(state) %>%
-  do(data.frame(.,
-                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
-  ungroup()
-
-covidByStateSmoothed %>%
-  filter(state == "New York") %>%
-  ggplot(aes(x=cases, y=smoothed)) +
-  geom_line(data = covidByStateSmoothed, aes(group = state), color = "grey") +
-  geom_line(aes(y = smoothed), color = "red") +
-  scale_x_log10(label = comma) + 
-  scale_y_log10(label = comma) +
-  coord_equal() +
-  theme_minimal()
-
-background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
-
-
-server <- function(input, output) {
+server <- function(input, output, session) {
+  observe({
+    covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
+    updateSelectInput(session, "state", label = "State/Country:", choices = unique(covidByStateSmoothed$state))
+  })
   output$plot1 <- renderPlotly({
+    covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
+    background_states <- getOutputListByGeo(input$geo)$background_geos
+    
     selected_state <- input$state
+    if (!selected_state %in% unique(covidByStateSmoothed$state)) {
+      # Don't plot yet because "state" select input is still loading.
+      return()
+    }
     background_states <- setdiff(background_states, selected_state)
     
     plot_data <- covidByStateSmoothed %>%
