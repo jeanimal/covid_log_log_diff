@@ -8,6 +8,7 @@
 
 library(shiny)
 library(plotly)
+library(shinycssloaders)
 source("functions.R")
 
 # Define UI for showing log-log-diff plots of covid cases.
@@ -25,7 +26,7 @@ ui <- fluidPage(
               c("US", "WORLD")),
   selectInput("state", "State:",
               c("_ALL_")),
-  plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE),
+  plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
   hr(),
   helpText("The data has been generously provided by the nytimes: ",
              a("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",
