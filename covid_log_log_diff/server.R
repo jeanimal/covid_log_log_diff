@@ -12,7 +12,10 @@ library(plotly)
 library(scales)
 source("functions.R")
 
-covidByState <- loadAndFormatNytimesCovidPerState()
+#covidByState <- loadAndFormatNytimesCovidPerState()
+outputList <- loadCovidDatabyGeo("WORLD")
+covidByState <- outputList$covidByGeo
+background_states <- outputList$background_geos
 
 # TODO: Move data processing into functions.R.
 covidByState<-covidByState %>% 
@@ -54,10 +57,6 @@ covidByStateSmoothed %>%
   scale_y_log10(label = comma) +
   coord_equal() +
   theme_minimal()
-
-background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
-
-background_states <- c("Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
 
 server <- function(input, output, session) {
   observe({

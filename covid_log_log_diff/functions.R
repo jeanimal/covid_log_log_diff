@@ -6,7 +6,7 @@ library(dplyr)
 # - state (as a string)
 # - cases
 # - newCasesPerDay (might be NA)
-loadAndFormatNytimesCovidPerState <- function() {
+loadCovidPerCountry <- function() {
   data <-read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM", stringsAsFactors =FALSE)
   data$date <- ISOdate(data$year, data$month, data$day)
   # Their 'cases' column is actually new cases.
@@ -25,7 +25,7 @@ loadAndFormatNytimesCovidPerState <- function() {
   arrange(data, state, date)
 }
 
-loadAndFormatNytimesCovidPerStateOld <- function() {
+loadAndFormatNytimesCovidPerState <- function() {
   covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
                             sep=",",
                             stringsAsFactors =FALSE)
@@ -37,3 +37,24 @@ loadAndFormatNytimesCovidPerStateOld <- function() {
   covidByState2$newCasesPerDay <- (covidByState2$cases - covidByState2$prevCases) / as.numeric(covidByState2$date - covidByState2$prevDate)
   covidByState2
 }
+
+background_states <- c("USA", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+
+background_states <- c("Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
+
+
+
+loadCovidDatabyGeo <- function(geo) {
+  if (geo=="US") {
+    df <- loadAndFormatNytimesCovidPerStateOld()
+    background_states <- c("ALL", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+    list(covidByGeo=df, background_geos=background_states)
+  } else if (geo=="WORLD") {
+    df <- loadCovidPerCountry()
+    background_geos <- c("ALL", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
+    list(covidByGeo=df, background_geos=background_geos)
+  } else {
+    stop(paste0("Unrecognized geo: ", geo))
+  }
+}
+
