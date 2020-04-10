@@ -15,12 +15,15 @@ source("functions.R")
 # Pre-load data.
 outputListUS <- loadCovidDatabyGeo("US")
 outputListWorld <- loadCovidDatabyGeo("WORLD")
+outputListUSCounty <- loadCovidDatabyGeo("US_COUNTY")
 
 getOutputListByGeo <- function(geo) {
   if (geo == "US") {
     return(outputListUS)
   } else if (geo == "WORLD") {
     return(outputListWorld)
+  } else if (geo=="US_COUNTY") {
+    return(outputListUSCounty)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }

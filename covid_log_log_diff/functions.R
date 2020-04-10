@@ -9,6 +9,10 @@ library(dplyr)
 loadCovidPerCountry <- function() {
   data <-read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM", stringsAsFactors =FALSE)
   data$date <- ISOdate(data$year, data$month, data$day)
+  # Only keep countries with > 10 rows of data.
+  data <- data %>%
+    group_by(geoId) %>%
+    filter(n() >= 10)
   # Their 'cases' column is actually new cases.
   data$newCasesPerDay <- data$cases
   data <- data %>%
@@ -18,10 +22,6 @@ loadCovidPerCountry <- function() {
   data$cases <- data$totalCases
   data$fips <- data$geoId
   data$state <- data$countriesAndTerritories
-  # Drop countries with too few rows of data.
-  data <- data %>%
-    group_by(geoId) %>%
-    filter(n() >= 10)
   arrange(data, state, date)
 }
 
@@ -38,6 +38,29 @@ loadAndFormatNytimesCovidPerState <- function() {
   covidByState2
 }
 
+loadCovidPerUSCounty <- function() {
+  data <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
+                    sep=",",
+                    stringsAsFactors =FALSE)
+  data$date <- as.Date(data$date)
+  # Hack to get this to work quickly: put the county in the state column.
+  # That should make it unique and also it will work in all other functions.
+  # (Save the original state in "us_state")
+  data$us_state <- data$state
+  data$state <- paste0(data$us_state, "_", data$county)
+  # Only keep counties with > 10 rows of data.
+  data <- data %>%
+    group_by(state) %>%
+    filter(n() >= 10)
+  data <- data %>%
+    group_by(state) %>%
+    arrange(date, .by_group = TRUE) %>%
+    mutate(prevDate = lag(date), prevCases = lag(cases))
+  data$newCasesPerDay <- (data$cases - data$prevCases) / as.numeric(data$date - data$prevDate)
+
+  arrange(data, state, date)
+}
+
 # Takes a data frame covidByState and returns a cleaned and smoothed version.
 # Also adds a new "state" called ALL which is the sum.
 # Assumes columns
@@ -50,6 +73,8 @@ cleanAndSmooth <- function(covidByState) {
   covidByState<-covidByState %>%
     dplyr::filter(!is.na(newCasesPerDay),
                   !is.na(cases),
+                  !is.infinite(newCasesPerDay),
+                  !is.nan(newCasesPerDay),
                   newCasesPerDay > 0,
                   cases > 0)
   
@@ -85,6 +110,10 @@ loadCovidDatabyGeo <- function(geo) {
   } else if (geo=="WORLD") {
     df <- loadCovidPerCountry()
     background_geos <- c("_ALL_", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
+    list(covidByGeo=cleanAndSmooth(df), background_geos=background_geos)
+  } else if (geo=="US_COUNTY") {
+    df <- loadCovidPerUSCounty()
+    background_geos <- c("_ALL_", "New York_New York City")
     list(covidByGeo=cleanAndSmooth(df), background_geos=background_geos)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
