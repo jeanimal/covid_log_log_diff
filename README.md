@@ -8,6 +8,14 @@ points head down, our social distancing is working.
 A full explanation and animated plots per country are in this video:
 How To Tell If We're Beating COVID-19: https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY
 
+# Data
+
+We provide functions to standardize data at three geographic levels:
+* Countries of the world.  Data is from the ECDC: https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
+* States of the United States of America. Data is from the nytimes: https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv
+* Counties of the United States of America, by state.  Data is from the nytimes: https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv
+
+
 # Authors
 
 * [Jean Czerlinski Whitmore](https://github.com/jeanimal)
