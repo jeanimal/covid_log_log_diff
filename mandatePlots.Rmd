@@ -77,7 +77,7 @@ joinMandatesWithCases <- function(mandatesByState, mandateColName, covidByState)
   # The c() function messes up evaluation so I use a hacky renaming.
   names(mandatesByStateWithCases)[[2]] <- "date"
   mandatesByStateWithCases <- mandatesByStateWithCases %>% left_join(covidByState, by=c("state", "date"))
-  names(mandatesByStateWithCases)[[2]] <- mandateColName
+  mandatesByStateWithCases$mandateType <- mandateColName
   mandatesByStateWithCases
 }
 ```
@@ -108,17 +108,36 @@ Recall that a straight line up and to the right represents exponential growth.  
 
 My summary: It seems rare that a state's covid case line plot flattens after a mandate.  Tennessee and NY have that pattern but not the others.
 
-```{r plot-all-mandates, echo=FALSE, fig.width=8, fig.height = 8}
+```{r melt-mandate-data, echo=FALSE}
 mandateStayHome <- joinMandatesWithCases(mandatesByState, "stayhome", covidByStateSmoothed)
 mandateSchools<- joinMandatesWithCases(mandatesByState, "schools", covidByStateSmoothed)
 mandateNonessential<- joinMandatesWithCases(mandatesByState, "nonessential", covidByStateSmoothed)
+mandates <- rbind(mandateStayHome, mandateSchools, mandateNonessential)
+```
+
+
+```{r plot-all-mandates, echo=FALSE, fig.width=9, fig.height = 8}
+# The factorFor fucntion manually jitters points by mandateType.
+# For example, California had all three mandates on the same day, and
+# we want to see all three ponts.
+factorFor <- function(mandateType) {
+  if (mandateType=="nonessential") {
+    return(1.14)
+  } else if (mandateType=="stayhome") {
+    return(0.86)
+  } else if (mandateType=="schools") {
+    return(1.0) 
+  }
+  stop(paste0("Unrecognized mandateType: ", mandateType))
+}
+factorForVector <- Vectorize(factorFor)
 ggplot(covidByStateSmoothed, aes(x=cases, y=smoothed, group = state)) +
     geom_line(data = covidByStateSmoothed %>% rename(group = state),
               aes(x = cases, y = smoothed, group = group), color = "grey") +
     geom_line(aes(y = smoothed), color = "black") +
-    geom_jitter(data=mandateStayHome, aes(x=cases, y=smoothed, color="stayHome")) +
-    geom_jitter(data=mandateSchools, aes(x=cases, y=smoothed, color="closeSchool")) +
-    geom_jitter(data=mandateNonessential, aes(x=cases, y=smoothed, color="closeNonessential")) +
+    scale_color_manual(values = c("red", "green", "blue")) +
+    geom_point(data=mandates, aes(x=cases, y=smoothed*factorForVector(mandateType),
+                                  group = state, color=mandateType)) +
     scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
     scale_y_log10(label = comma) +
     coord_equal() +

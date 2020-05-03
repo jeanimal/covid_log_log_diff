@@ -17,7 +17,7 @@ This combines data on state mandates with cases to help visualize the affect, if
 
 
 ```
-## ── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -28,7 +28,7 @@ This combines data on state mandates with cases to help visualize the affect, if
 ```
 
 ```
-## ── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -104,7 +104,7 @@ joinMandatesWithCases <- function(mandatesByState, mandateColName, covidByState)
   # The c() function messes up evaluation so I use a hacky renaming.
   names(mandatesByStateWithCases)[[2]] <- "date"
   mandatesByStateWithCases <- mandatesByStateWithCases %>% left_join(covidByState, by=c("state", "date"))
-  names(mandatesByStateWithCases)[[2]] <- mandateColName
+  mandatesByStateWithCases$mandateType <- mandateColName
   mandatesByStateWithCases
 }
 ```
@@ -137,68 +137,13 @@ Recall that a straight line up and to the right represents exponential growth.  
 My summary: It seems rare that a state's covid case line plot flattens after a mandate.  Tennessee and NY have that pattern but not the others.
 
 
-```
-## Warning: Removed 3 rows containing missing values (geom_point).
-```
+
+
 
 ```
-## Warning: Removed 2 rows containing missing values (geom_point).
+## Warning: Removed 5 rows containing missing values (geom_point).
 ```
 
 ![](mandate_figs/mandate-plot-all-mandates-1.png)<!-- -->
 
-Above I put all three mandates on one plot.  Below I do one mandate at a time.
 
-## The effect of Stay at Home orders
-
-I created a helper function to generate the facet plots.
-
-
-```r
-# Makes a faceted plot of case growth with a dot representing the start of a mandate.
-# Both covidByStateSmoothed and mandatesByStateWithCases are data frames with columns
-# - cases
-# - smoothed
-# - state
-# However, while covidByStateSmoothed should have data for many dates,
-# mandatesByStateWithCases should have data for only one date, the mandate start date.
-# The final plot does *not* have dates on an axis, which is why the association between
-# these data frames is indirect.
-facetedPlotWithMandates <- function(covidByStateSmoothed, mandatesByStateWithCases, mandateName) {
-  ggplot(covidByStateSmoothed, aes(x=cases, y=smoothed, group = state)) +
-    geom_line(data = covidByStateSmoothed %>% rename(group = state),
-              aes(x = cases, y = smoothed, group = group), color = "grey") +
-    geom_line(aes(y = smoothed), color = "red") +
-    geom_point(data=mandatesByStateWithCases, aes(x=cases, y=smoothed)) +
-    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
-    scale_y_log10(label = comma) +
-    coord_equal() +
-    labs(x = 'Total confirmed cases',
-         y = 'New confirmed cases per day',
-         title = 'Trajectory of COVID-19 cases in the U.S.',
-         subtitle = paste0('Dot is start of ', mandateName)) +
-    facet_wrap(~ state) +
-    theme_minimal()
-}
-```
-
-Now pass the helper function the data for each mandate.
-
-
-```
-## Warning: Removed 3 rows containing missing values (geom_point).
-```
-
-![](mandate_figs/mandate-plot-stay-at-home-1.png)<!-- -->
-
-
-## The effect of school closures
-
-![](mandate_figs/mandate-plot-school-1.png)<!-- -->
-
-
-```
-## Warning: Removed 2 rows containing missing values (geom_point).
-```
-
-![](mandate_figs/mandate-plot-nonessential-1.png)<!-- -->
