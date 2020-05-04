@@ -102,7 +102,7 @@ cleanAndSmooth <- function(covidByState) {
   covidByStateSmoothed
 }
 
-loadCovidDataBy2Geo <- function(geo) {
+loadCovidDataByGeo <- function(geo) {
   if (geo=="US") {
     df <- loadAndFormatNytimesCovidPerState()
   } else if (geo=="WORLD") {
@@ -118,13 +118,13 @@ loadCovidDataBy2Geo <- function(geo) {
 loadCovidDataAndBackgroundByGeo <- function(geo) {
   if (geo=="US") {
     background_states <- c("_ALL_", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
-    list(covidByGeo=loadCovidDataBy2Geo(geo), background_geos=background_states)
+    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_states)
   } else if (geo=="WORLD") {
     background_geos <- c("_ALL_", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America")
-    list(covidByGeo=loadCovidDataBy2Geo(geo), background_geos=background_geos)
+    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_geos)
   } else if (geo=="US_COUNTY") {
     background_geos <- c("_ALL_", "New York: New York City")
-    list(covidByGeo=loadCovidDataBy2Geo(geo), background_geos=background_geos)
+    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_geos)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }

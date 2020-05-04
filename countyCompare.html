@@ -445,7 +445,6 @@ summary {
 <li><a href="#loading-data"><span class="toc-section-number">0.1</span> Loading data</a></li>
 <li><a href="#michigan"><span class="toc-section-number">0.2</span> Michigan</a></li>
 <li><a href="#california"><span class="toc-section-number">0.3</span> California</a></li>
-<li><a href="#michigan-1"><span class="toc-section-number">0.4</span> Michigan</a></li>
 </ul>
 </div>
 
@@ -468,7 +467,7 @@ summary {
 ##     col_factor</code></pre>
 <div id="loading-data" class="section level2">
 <h2><span class="header-section-number">0.1</span> Loading data</h2>
-<pre class="r"><code>covidByCounty &lt;- loadCovidDataBy2Geo(&quot;US_COUNTY&quot;)</code></pre>
+<pre class="r"><code>covidByCounty &lt;- loadCovidDataByGeo(&quot;US_COUNTY&quot;)</code></pre>
 </div>
 <div id="michigan" class="section level2">
 <h2><span class="header-section-number">0.2</span> Michigan</h2>
@@ -490,9 +489,6 @@ summary {
 </div>
 <div id="california" class="section level2">
 <h2><span class="header-section-number">0.3</span> California</h2>
-</div>
-<div id="michigan-1" class="section level2">
-<h2><span class="header-section-number">0.4</span> Michigan</h2>
 <pre class="r"><code>plotData &lt;- covidByCounty %&gt;%
   dplyr::filter(us_state==&quot;California&quot;)</code></pre>
 <pre class="r"><code>ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +

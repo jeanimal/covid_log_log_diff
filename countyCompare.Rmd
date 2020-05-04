@@ -31,7 +31,7 @@ source('covid_log_log_diff/functions.R')
 ## Loading data
 
 ```{r covid-cases-by-us-county}
-covidByCounty <- loadCovidDataBy2Geo("US_COUNTY")
+covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 ```
 
 ## Michigan
@@ -58,8 +58,6 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 
 
 ## California
-
-## Michigan
 
 ```{r}
 plotData <- covidByCounty %>%

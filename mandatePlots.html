@@ -469,7 +469,7 @@ summary {
 ##     col_factor</code></pre>
 <div id="loading-data" class="section level2">
 <h2><span class="header-section-number">0.1</span> Loading data</h2>
-<pre class="r"><code>covidByStateSmoothed &lt;- loadCovidDataBy2Geo(&quot;US&quot;)</code></pre>
+<pre class="r"><code>covidByStateSmoothed &lt;- loadCovidDataByGeo(&quot;US&quot;)</code></pre>
 <pre class="r"><code>mandatesByState &lt;- read.csv2('https://raw.githubusercontent.com/jeanimal/covid_log_log_diff/master/covid_log_log_diff/data/covid_state_mandates.csv', sep=&quot;,&quot;, stringsAsFactors=FALSE, na.strings=c(&quot;&quot;))
 mandatesByState$stayhome &lt;- as.Date(mandatesByState$stayhome)
 mandatesByState$schools &lt;- as.Date(mandatesByState$schools)

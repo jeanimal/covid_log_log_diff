@@ -30,7 +30,7 @@ source('covid_log_log_diff/functions.R')
 ## Loading data
 
 ```{r covid-cases-by-state}
-covidByStateSmoothed <- loadCovidDataBy2Geo("US")
+covidByStateSmoothed <- loadCovidDataByGeo("US")
 ```
 
 ```{r mandates-by-state}

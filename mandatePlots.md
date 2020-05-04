@@ -54,7 +54,7 @@ This combines data on state mandates with cases to help visualize the affect, if
 
 
 ```r
-covidByStateSmoothed <- loadCovidDataBy2Geo("US")
+covidByStateSmoothed <- loadCovidDataByGeo("US")
 ```
 
 
