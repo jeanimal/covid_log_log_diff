@@ -30,7 +30,7 @@ source('covid_log_log_diff/functions.R')
 ## Loading data
 
 ```{r covid-cases-by-state}
-covidByState <- loadAndFormatNytimesCovidPerState()
+covidByStateSmoothed <- loadCovidDataBy2Geo("US")
 ```
 
 ```{r mandates-by-state}
@@ -39,25 +39,6 @@ mandatesByState$stayhome <- as.Date(mandatesByState$stayhome)
 mandatesByState$schools <- as.Date(mandatesByState$schools)
 mandatesByState$nonessential <- as.Date(mandatesByState$nonessential)
 mandatesByState$travel <- as.Date(mandatesByState$travel)
-```
-
-## Munging data
-
-```{r smooth-covid-by-state}
-covidByState<-covidByState %>% 
-  dplyr::filter(!is.na(newCasesPerDay), 
-                !is.na(cases), 
-                newCasesPerDay > 0, 
-                cases > 0)  %>%
-  dplyr::select(-prevDate,-prevCases)
-
-# create loess-smoothed versions of time series for each state
-covidByStateSmoothed <- covidByState %>%
-  filter(!(state %in% c("USA","Northern Mariana Islands","Virgin Islands","Guam"))) %>%
-  group_by(state) %>%
-  do(data.frame(.,
-                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
-  ungroup()
 ```
 
 ## Plot helpers

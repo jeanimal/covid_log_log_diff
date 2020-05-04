@@ -55,14 +55,14 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 
 
 ```r
-covidByCounty <- loadCovidDatabyGeo("US_COUNTY")
+covidByCounty <- loadCovidDataBy2Geo("US_COUNTY")
 ```
 
 ## Michigan
 
 
 ```r
-plotData <- covidByCounty$covidByGeo %>%
+plotData <- covidByCounty %>%
   dplyr::filter(us_state=="Michigan")
 ```
 
@@ -91,7 +91,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 
 
 ```r
-plotData <- covidByCounty$covidByGeo %>%
+plotData <- covidByCounty %>%
   dplyr::filter(us_state=="California")
 ```
 

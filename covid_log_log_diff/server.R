@@ -13,9 +13,9 @@ library(scales)
 source("functions.R")
 
 # Pre-load data.
-outputListUS <- loadCovidDatabyGeo("US")
-outputListWorld <- loadCovidDatabyGeo("WORLD")
-outputListUSCounty <- loadCovidDatabyGeo("US_COUNTY")
+outputListUS <- loadCovidDataAndBackgroundByGeo("US")
+outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
+outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY")
 
 getOutputListByGeo <- function(geo) {
   if (geo == "US") {

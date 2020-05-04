@@ -54,7 +54,7 @@ This combines data on state mandates with cases to help visualize the affect, if
 
 
 ```r
-covidByState <- loadAndFormatNytimesCovidPerState()
+covidByStateSmoothed <- loadCovidDataBy2Geo("US")
 ```
 
 
@@ -64,26 +64,6 @@ mandatesByState$stayhome <- as.Date(mandatesByState$stayhome)
 mandatesByState$schools <- as.Date(mandatesByState$schools)
 mandatesByState$nonessential <- as.Date(mandatesByState$nonessential)
 mandatesByState$travel <- as.Date(mandatesByState$travel)
-```
-
-## Munging data
-
-
-```r
-covidByState<-covidByState %>% 
-  dplyr::filter(!is.na(newCasesPerDay), 
-                !is.na(cases), 
-                newCasesPerDay > 0, 
-                cases > 0)  %>%
-  dplyr::select(-prevDate,-prevCases)
-
-# create loess-smoothed versions of time series for each state
-covidByStateSmoothed <- covidByState %>%
-  filter(!(state %in% c("USA","Northern Mariana Islands","Virgin Islands","Guam"))) %>%
-  group_by(state) %>%
-  do(data.frame(.,
-                smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
-  ungroup()
 ```
 
 ## Plot helpers
