@@ -77,7 +77,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     coord_equal() +
     labs(x = 'Total confirmed cases',
          y = 'New confirmed cases per day',
-         title = 'Trajectory of COVID-19 cases in Michigan counties') +
+         title = 'Trajectory of COVID-19 cases in New York counties') +
     facet_wrap(~ county) +
     theme_minimal()
 ```
