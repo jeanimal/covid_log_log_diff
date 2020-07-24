@@ -58,6 +58,56 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 ```
 
+## Steep increase counties
+
+Counties that ever hit 1,000 new cases per day.
+
+```r
+steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 1000) %>% dplyr::filter(state != "_ALL_")
+steepIncreaseNames <- unique(steepIncrease$state)
+steepIncreaseNames
+```
+
+```
+##  [1] "Arizona: Maricopa"          "California: Kern"          
+##  [3] "California: Los Angeles"    "California: Orange"        
+##  [5] "California: Riverside"      "California: San Bernardino"
+##  [7] "Connecticut: Fairfield"     "Florida: Broward"          
+##  [9] "Florida: Hillsborough"      "Florida: Lee"              
+## [11] "Florida: Miami-Dade"        "Florida: Orange"           
+## [13] "Florida: Palm Beach"        "Georgia: Unknown"          
+## [15] "Illinois: Cook"             "Michigan: Oakland"         
+## [17] "Michigan: Wayne"            "Nevada: Clark"             
+## [19] "New York: Nassau"           "New York: New York City"   
+## [21] "New York: Suffolk"          "New York: Westchester"     
+## [23] "Pennsylvania: Philadelphia" "Rhode Island: Providence"  
+## [25] "Texas: Bexar"               "Texas: Dallas"             
+## [27] "Texas: Harris"              "Texas: Hidalgo"
+```
+
+
+```r
+plotData <- covidByCounty %>%
+  dplyr::filter(state %in% steepIncreaseNames)
+```
+
+
+```r
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = state),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = 'Trajectory of COVID-19 cases in steep increase counties') +
+    facet_wrap(~ state) +
+    theme_minimal()
+```
+
+![](county_compare_figs/county-plot-steep-counties-1.png)<!-- -->
 ## New York
 
 

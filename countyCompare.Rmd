@@ -34,6 +34,35 @@ source('covid_log_log_diff/functions.R')
 covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 ```
 
+## Steep increase counties
+
+Counties that ever hit 1,000 new cases per day.
+```{r}
+steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 1000) %>% dplyr::filter(state != "_ALL_")
+steepIncreaseNames <- unique(steepIncrease$state)
+steepIncreaseNames
+```
+
+```{r}
+
+plotData <- covidByCounty %>%
+  dplyr::filter(state %in% steepIncreaseNames)
+```
+
+```{r plot-steep-counties, fig.width=12, fig.height = 14}
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = state),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = 'Trajectory of COVID-19 cases in steep increase counties') +
+    facet_wrap(~ state) +
+    theme_minimal()
+```
 ## New York
 
 ```{r}
