@@ -82,7 +82,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     theme_minimal()
 ```
 
-![](county_compare_figs/county-plot-michigan-counties-1.png)<!-- -->
+![](county_compare_figs/county-plot-mi-counties-1.png)<!-- -->
 
 
 ## California
@@ -109,4 +109,60 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     theme_minimal()
 ```
 
-![](county_compare_figs/county-plot-california-counties-1.png)<!-- -->
+![](county_compare_figs/county-plot-ca-counties-1.png)<!-- -->
+
+## Louisiana
+
+No protests against lockdown in Tennessee but I am curious how it looks.  I removed Bledsoe county because it seems to have a data error (100 million new cases on one day).
+
+
+```r
+plotData <- covidByCounty %>%
+  dplyr::filter(us_state=="Louisiana")
+```
+
+
+```r
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = county),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 10000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = 'Trajectory of COVID-19 cases in Louisiana counties') +
+    facet_wrap(~ county) +
+    theme_minimal()
+```
+
+![](county_compare_figs/county-plot-la-counties-1.png)<!-- -->
+
+## Tennessee
+
+No protests against lockdown in Tennessee but I am curious how it looks.  I removed Bledsoe county because it seems to have a data error (100 million new cases on one day).
+
+
+```r
+plotData <- covidByCounty %>%
+  dplyr::filter(us_state=="Tennessee") %>% dplyr::filter(county!="Bledsoe")
+```
+
+
+```r
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = county),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 10000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = 'Trajectory of COVID-19 cases in Tennessee counties') +
+    facet_wrap(~ county) +
+    theme_minimal()
+```
+
+![](county_compare_figs/county-plot-tn-counties-1.png)<!-- -->
