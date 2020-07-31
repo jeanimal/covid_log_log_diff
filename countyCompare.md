@@ -81,8 +81,9 @@ steepIncreaseNames
 ## [19] "New York: Nassau"           "New York: New York City"   
 ## [21] "New York: Suffolk"          "New York: Westchester"     
 ## [23] "Pennsylvania: Philadelphia" "Rhode Island: Providence"  
-## [25] "Texas: Bexar"               "Texas: Dallas"             
-## [27] "Texas: Harris"              "Texas: Hidalgo"
+## [25] "Texas: Bexar"               "Texas: Cameron"            
+## [27] "Texas: Dallas"              "Texas: Harris"             
+## [29] "Texas: Hidalgo"
 ```
 
 
