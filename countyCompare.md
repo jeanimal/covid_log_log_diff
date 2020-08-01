@@ -135,6 +135,32 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 
 ![](county_compare_figs/county-plot-ny-counties-1.png)<!-- -->
 
+## New Jersey
+
+
+```r
+plotData <- covidByCounty %>%
+  dplyr::filter(us_state=="New Jersey")
+```
+
+
+```r
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = county),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = paste('Trajectory of COVID-19 cases in', 'New Jersey', 'counties')) +
+    facet_wrap(~ county) +
+    theme_minimal()
+```
+
+![](county_compare_figs/county-plot-nj-counties-1.png)<!-- -->
+
 ## Michigan
 
 
@@ -161,6 +187,32 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 
 ![](county_compare_figs/county-plot-mi-counties-1.png)<!-- -->
 
+
+## Ohio
+
+
+```r
+plotData <- covidByCounty %>%
+  dplyr::filter(us_state=="Ohio")
+```
+
+
+```r
+ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
+    geom_line(data = plotData %>% rename(group = county),
+              aes(x = cases, y = smoothed, group = group), color = "grey") +
+    geom_line(aes(y = smoothed), color = "black") +
+    scale_x_log10(label = comma, breaks = c(100, 1000, 100000)) + 
+    scale_y_log10(label = comma) +
+    coord_equal() +
+    labs(x = 'Total confirmed cases',
+         y = 'New confirmed cases per day',
+         title = paste('Trajectory of COVID-19 cases in', 'Ohio', 'counties')) +
+    facet_wrap(~ county) +
+    theme_minimal()
+```
+
+![](county_compare_figs/county-plot-oh-counties-1.png)<!-- -->
 
 ## California
 
