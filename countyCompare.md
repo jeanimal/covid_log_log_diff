@@ -266,7 +266,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     theme_minimal()
 ```
 
-![](county_compare_figs/county-plot-louisiana-counties-1.png)<!-- -->
+![](county_compare_figs/county-plot-la-counties-1.png)<!-- -->
 
 ## Tennessee
 

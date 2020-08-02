@@ -183,7 +183,7 @@ plotData <- covidByCounty %>%
   dplyr::filter(us_state=="Louisiana")
 ```
 
-```{r plot-louisiana-counties, fig.width=10, fig.height = 12}
+```{r plot-la-counties, fig.width=10, fig.height = 12}
 ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     geom_line(data = plotData %>% rename(group = county),
               aes(x = cases, y = smoothed, group = group), color = "grey") +
