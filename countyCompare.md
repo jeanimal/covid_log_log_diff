@@ -18,7 +18,7 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ──────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -29,7 +29,7 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
