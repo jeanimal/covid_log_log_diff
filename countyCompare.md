@@ -1,7 +1,7 @@
 ---
 title: "County Comparison plots"
 author: "Jean Czerlinski Whitmore (jeanimal)"
-date: "5/3/2020"
+date: "8/7/2020"
 output:
   html_document:
     code_folding: hide
@@ -18,7 +18,7 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 
 
 ```
-## ── Attaching packages ──────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
@@ -29,7 +29,7 @@ I noticed counties with protests had a double-hump shape.  I wanted to compare t
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -83,7 +83,7 @@ steepIncreaseNames
 ## [23] "Pennsylvania: Philadelphia" "Rhode Island: Providence"  
 ## [25] "Texas: Bexar"               "Texas: Cameron"            
 ## [27] "Texas: Dallas"              "Texas: Harris"             
-## [29] "Texas: Hidalgo"
+## [29] "Texas: Hidalgo"             "Texas: Tarrant"
 ```
 
 
@@ -109,6 +109,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 ```
 
 ![](county_compare_figs/county-plot-steep-counties-1.png)<!-- -->
+
 ## New York
 
 
@@ -267,8 +268,6 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 ![](county_compare_figs/county-plot-ca-counties-1.png)<!-- -->
 
 ## Louisiana
-
-No protests against lockdown in Tennessee but I am curious how it looks.  I removed Bledsoe county because it seems to have a data error (100 million new cases on one day).
 
 
 ```r

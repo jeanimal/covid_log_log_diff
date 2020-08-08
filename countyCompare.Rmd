@@ -1,7 +1,7 @@
 ---
 title: "County Comparison plots"
 author: "Jean Czerlinski Whitmore (jeanimal)"
-date: "5/3/2020"
+date: "8/7/2020"
 output:
   html_document:
     code_folding: hide
@@ -63,6 +63,7 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
     facet_wrap(~ state) +
     theme_minimal()
 ```
+
 ## New York
 
 ```{r}
@@ -197,8 +198,6 @@ ggplot(plotData, aes(x=cases, y=smoothed, group = state)) +
 ```
 
 ## Louisiana
-
-No protests against lockdown in Tennessee but I am curious how it looks.  I removed Bledsoe county because it seems to have a data error (100 million new cases on one day).
 
 ```{r}
 plotData <- covidByCounty %>%
