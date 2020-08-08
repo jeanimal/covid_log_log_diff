@@ -29,14 +29,6 @@ getOutputListByGeo <- function(geo) {
   }
 }
 
-trial <- function() {
-  if (dbeta(x, 400, 1000) > dbeta(x, 2, 5)) {
-    return 0
-  } else {
-    return 1
-  }
-}
-
 server <- function(input, output, session) {
   observe({
     covidByStateSmoothed <- getOutputListByGeo(input$geo)$covidByGeo
