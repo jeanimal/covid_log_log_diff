@@ -117,10 +117,10 @@ loadCovidDataByGeo <- function(geo) {
 
 loadCovidDataAndBackgroundByGeo <- function(geo) {
   if (geo=="US") {
-    background_states <- c("_ALL_", "New York", "New Jersey", "California", "Michigan", "Louisiana", "Florida", "Massachusetts", "Illinois", "Pennsylvania", "Washington")
+    background_states <- c("_ALL_", "New York", "California", "Michigan", "Louisiana", "Florida")
     list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_states)
   } else if (geo=="WORLD") {
-    background_geos <- c("_ALL_", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America", "Mexico", "Brazil", "Russia")
+    background_geos <- c("_ALL_", "Italy", "Germany", "China", "South_Korea", "United_Kingdom", "United_States_of_America", "Brazil")
     list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_geos)
   } else if (geo=="US_COUNTY") {
     background_geos <- c("_ALL_", "New York: New York City")
