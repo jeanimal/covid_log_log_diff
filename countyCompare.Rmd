@@ -1,7 +1,7 @@
 ---
 title: "County Comparison plots"
 author: "Jean Czerlinski Whitmore (jeanimal)"
-date: "8/7/2020"
+date: "8/22/2020"
 output:
   html_document:
     code_folding: hide

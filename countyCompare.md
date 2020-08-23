@@ -1,7 +1,7 @@
 ---
 title: "County Comparison plots"
 author: "Jean Czerlinski Whitmore (jeanimal)"
-date: "8/7/2020"
+date: "8/22/2020"
 output:
   html_document:
     code_folding: hide
@@ -82,8 +82,9 @@ steepIncreaseNames
 ## [21] "New York: Suffolk"          "New York: Westchester"     
 ## [23] "Pennsylvania: Philadelphia" "Rhode Island: Providence"  
 ## [25] "Texas: Bexar"               "Texas: Cameron"            
-## [27] "Texas: Dallas"              "Texas: Harris"             
-## [29] "Texas: Hidalgo"             "Texas: Tarrant"
+## [27] "Texas: Collin"              "Texas: Dallas"             
+## [29] "Texas: Harris"              "Texas: Hidalgo"            
+## [31] "Texas: Nueces"              "Texas: Tarrant"
 ```
 
 
