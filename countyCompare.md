@@ -301,7 +301,7 @@ No protests against lockdown in Tennessee but I am curious how it looks.  I remo
 
 ```r
 plotData <- covidByCounty %>%
-  dplyr::filter(us_state=="Tennessee") %>% dplyr::filter(county!="Bledsoe")
+  dplyr::filter(us_state=="Tennessee") %>% filter(! (county %in% c("Bledsoe", "Trousdale")))
 ```
 
 
