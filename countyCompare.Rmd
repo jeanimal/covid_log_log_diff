@@ -11,7 +11,11 @@ output:
     toc_depth: 3
 ---
 
-I noticed counties with protests had a double-hump shape.  I wanted to compare this shape with other counties in the same state.
+Sure, we see multi-peak (double-hump) infections at the national or state level,
+but do they happen in small geographic regions?  It's possible that after the
+first wave, people have some herd immunity and improve their safety practices
+to prevent a second wave.  County level data helps us answer this-- still not
+as granular as I'd like but better than state level data.
 
 
 ```{r setup, include=FALSE}
