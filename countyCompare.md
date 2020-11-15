@@ -62,6 +62,26 @@ as granular as I'd like but better than state level data.
 covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 ```
 
+```
+## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+## parametric, : pseudoinverse used at 0.29831
+```
+
+```
+## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+## parametric, : neighborhood radius 0.30375
+```
+
+```
+## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+## parametric, : reciprocal condition number 0
+```
+
+```
+## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+## parametric, : There are other near singularities as well. 0.090619
+```
+
 ## Steep increase counties
 
 Counties that ever hit 1,000 new cases per day.
@@ -77,27 +97,33 @@ steepIncreaseNames
 ##  [3] "Arizona: Maricopa"          "California: Kern"          
 ##  [5] "California: Los Angeles"    "California: Orange"        
 ##  [7] "California: Riverside"      "California: San Bernardino"
-##  [9] "Connecticut: Fairfield"     "Florida: Broward"          
-## [11] "Florida: Hillsborough"      "Florida: Lee"              
-## [13] "Florida: Miami-Dade"        "Florida: Orange"           
-## [15] "Florida: Palm Beach"        "Georgia: Cobb"             
-## [17] "Georgia: Fulton"            "Georgia: Gwinnett"         
-## [19] "Georgia: Unknown"           "Illinois: Cook"            
-## [21] "Illinois: Unknown"          "Kansas: Sedgwick"          
-## [23] "Louisiana: Unknown"         "Michigan: Oakland"         
-## [25] "Michigan: Wayne"            "Nevada: Clark"             
-## [27] "New York: Nassau"           "New York: New York City"   
-## [29] "New York: Suffolk"          "New York: Westchester"     
-## [31] "Pennsylvania: Philadelphia" "Rhode Island: Providence"  
-## [33] "Rhode Island: Unknown"      "South Carolina: Aiken"     
-## [35] "Texas: Anderson"            "Texas: Bexar"              
-## [37] "Texas: Cameron"             "Texas: Collin"             
-## [39] "Texas: Dallas"              "Texas: Denton"             
-## [41] "Texas: El Paso"             "Texas: Guadalupe"          
-## [43] "Texas: Harris"              "Texas: Hidalgo"            
-## [45] "Texas: Nueces"              "Texas: Potter"             
-## [47] "Texas: Tarrant"             "Utah: Salt Lake"           
-## [49] "Wisconsin: Milwaukee"
+##  [9] "California: San Diego"      "Colorado: El Paso"         
+## [11] "Connecticut: Fairfield"     "Florida: Broward"          
+## [13] "Florida: Hillsborough"      "Florida: Lee"              
+## [15] "Florida: Miami-Dade"        "Florida: Orange"           
+## [17] "Florida: Palm Beach"        "Georgia: Cobb"             
+## [19] "Georgia: Fulton"            "Georgia: Gwinnett"         
+## [21] "Georgia: Unknown"           "Illinois: Cook"            
+## [23] "Illinois: DuPage"           "Illinois: Kane"            
+## [25] "Illinois: Lake"             "Illinois: Unknown"         
+## [27] "Indiana: Marion"            "Kansas: Johnson"           
+## [29] "Kansas: Sedgwick"           "Louisiana: Unknown"        
+## [31] "Michigan: Oakland"          "Michigan: Wayne"           
+## [33] "Minnesota: Hennepin"        "Nevada: Clark"             
+## [35] "New York: Nassau"           "New York: New York City"   
+## [37] "New York: Suffolk"          "New York: Westchester"     
+## [39] "Ohio: Hamilton"             "Oklahoma: Oklahoma"        
+## [41] "Pennsylvania: Philadelphia" "Puerto Rico: Unknown"      
+## [43] "Rhode Island: Providence"   "Rhode Island: Unknown"     
+## [45] "South Carolina: Aiken"      "Texas: Anderson"           
+## [47] "Texas: Bexar"               "Texas: Cameron"            
+## [49] "Texas: Collin"              "Texas: Dallas"             
+## [51] "Texas: Denton"              "Texas: El Paso"            
+## [53] "Texas: Guadalupe"           "Texas: Harris"             
+## [55] "Texas: Hidalgo"             "Texas: Nueces"             
+## [57] "Texas: Potter"              "Texas: Tarrant"            
+## [59] "Texas: Williamson"          "Utah: Salt Lake"           
+## [61] "Utah: Utah"                 "Wisconsin: Milwaukee"
 ```
 
 
