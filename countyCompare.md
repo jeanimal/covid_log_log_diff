@@ -62,26 +62,6 @@ as granular as I'd like but better than state level data.
 covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 ```
 
-```
-## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-## parametric, : pseudoinverse used at 0.29831
-```
-
-```
-## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-## parametric, : neighborhood radius 0.30375
-```
-
-```
-## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-## parametric, : reciprocal condition number 0
-```
-
-```
-## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-## parametric, : There are other near singularities as well. 0.090619
-```
-
 ## Steep increase counties
 
 Counties that ever hit 1,000 new cases per day.
@@ -98,32 +78,36 @@ steepIncreaseNames
 ##  [5] "California: Los Angeles"    "California: Orange"        
 ##  [7] "California: Riverside"      "California: San Bernardino"
 ##  [9] "California: San Diego"      "Colorado: El Paso"         
-## [11] "Connecticut: Fairfield"     "Florida: Broward"          
-## [13] "Florida: Hillsborough"      "Florida: Lee"              
-## [15] "Florida: Miami-Dade"        "Florida: Orange"           
-## [17] "Florida: Palm Beach"        "Georgia: Cobb"             
-## [19] "Georgia: Fulton"            "Georgia: Gwinnett"         
-## [21] "Georgia: Unknown"           "Illinois: Cook"            
-## [23] "Illinois: DuPage"           "Illinois: Kane"            
-## [25] "Illinois: Lake"             "Illinois: Unknown"         
-## [27] "Indiana: Marion"            "Kansas: Johnson"           
-## [29] "Kansas: Sedgwick"           "Louisiana: Unknown"        
-## [31] "Michigan: Oakland"          "Michigan: Wayne"           
-## [33] "Minnesota: Hennepin"        "Nevada: Clark"             
-## [35] "New York: Nassau"           "New York: New York City"   
-## [37] "New York: Suffolk"          "New York: Westchester"     
-## [39] "Ohio: Hamilton"             "Oklahoma: Oklahoma"        
-## [41] "Pennsylvania: Philadelphia" "Puerto Rico: Unknown"      
-## [43] "Rhode Island: Providence"   "Rhode Island: Unknown"     
-## [45] "South Carolina: Aiken"      "Texas: Anderson"           
-## [47] "Texas: Bexar"               "Texas: Cameron"            
-## [49] "Texas: Collin"              "Texas: Dallas"             
-## [51] "Texas: Denton"              "Texas: El Paso"            
-## [53] "Texas: Guadalupe"           "Texas: Harris"             
-## [55] "Texas: Hidalgo"             "Texas: Nueces"             
-## [57] "Texas: Potter"              "Texas: Tarrant"            
-## [59] "Texas: Williamson"          "Utah: Salt Lake"           
-## [61] "Utah: Utah"                 "Wisconsin: Milwaukee"
+## [11] "Connecticut: Fairfield"     "Connecticut: Hartford"     
+## [13] "Connecticut: New Haven"     "Florida: Broward"          
+## [15] "Florida: Hillsborough"      "Florida: Lee"              
+## [17] "Florida: Miami-Dade"        "Florida: Orange"           
+## [19] "Florida: Palm Beach"        "Georgia: Cobb"             
+## [21] "Georgia: Fulton"            "Georgia: Gwinnett"         
+## [23] "Georgia: Unknown"           "Illinois: Cook"            
+## [25] "Illinois: DuPage"           "Illinois: Kane"            
+## [27] "Illinois: Lake"             "Illinois: Unknown"         
+## [29] "Indiana: Marion"            "Kansas: Johnson"           
+## [31] "Kansas: Sedgwick"           "Louisiana: Unknown"        
+## [33] "Michigan: Kent"             "Michigan: Macomb"          
+## [35] "Michigan: Oakland"          "Michigan: Wayne"           
+## [37] "Minnesota: Hennepin"        "Missouri: St. Louis"       
+## [39] "Nebraska: Douglas"          "Nevada: Clark"             
+## [41] "New Mexico: Bernalillo"     "New York: Nassau"          
+## [43] "New York: New York City"    "New York: Suffolk"         
+## [45] "New York: Westchester"      "Ohio: Hamilton"            
+## [47] "Oklahoma: Oklahoma"         "Pennsylvania: Philadelphia"
+## [49] "Puerto Rico: Unknown"       "Rhode Island: Providence"  
+## [51] "Rhode Island: Unknown"      "South Carolina: Aiken"     
+## [53] "Texas: Anderson"            "Texas: Bexar"              
+## [55] "Texas: Cameron"             "Texas: Collin"             
+## [57] "Texas: Dallas"              "Texas: Denton"             
+## [59] "Texas: El Paso"             "Texas: Guadalupe"          
+## [61] "Texas: Harris"              "Texas: Hidalgo"            
+## [63] "Texas: Nueces"              "Texas: Potter"             
+## [65] "Texas: Tarrant"             "Texas: Williamson"         
+## [67] "Utah: Salt Lake"            "Utah: Utah"                
+## [69] "Wisconsin: Milwaukee"       "Wisconsin: Waukesha"
 ```
 
 
