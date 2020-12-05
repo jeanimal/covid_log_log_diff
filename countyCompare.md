@@ -22,20 +22,36 @@ as granular as I'd like but better than state level data.
 
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.5
-## ✔ tidyr   1.0.2     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.5.0
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.3
+## ✓ tibble  3.0.4     ✓ dplyr   0.8.5
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## Warning: package 'ggplot2' was built under R version 3.6.2
+```
+
+```
+## Warning: package 'tibble' was built under R version 3.6.2
+```
+
+```
+## Warning: package 'tidyr' was built under R version 3.6.2
+```
+
+```
+## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+```
+## Warning: package 'scales' was built under R version 3.6.2
 ```
 
 ```
@@ -76,38 +92,48 @@ steepIncreaseNames
 ##  [1] "Alabama: Mobile"            "Alabama: Tuscaloosa"       
 ##  [3] "Arizona: Maricopa"          "California: Kern"          
 ##  [5] "California: Los Angeles"    "California: Orange"        
-##  [7] "California: Riverside"      "California: San Bernardino"
-##  [9] "California: San Diego"      "Colorado: El Paso"         
-## [11] "Connecticut: Fairfield"     "Connecticut: Hartford"     
-## [13] "Connecticut: New Haven"     "Florida: Broward"          
-## [15] "Florida: Hillsborough"      "Florida: Lee"              
-## [17] "Florida: Miami-Dade"        "Florida: Orange"           
-## [19] "Florida: Palm Beach"        "Georgia: Cobb"             
-## [21] "Georgia: Fulton"            "Georgia: Gwinnett"         
-## [23] "Georgia: Unknown"           "Illinois: Cook"            
-## [25] "Illinois: DuPage"           "Illinois: Kane"            
-## [27] "Illinois: Lake"             "Illinois: Unknown"         
-## [29] "Indiana: Marion"            "Kansas: Johnson"           
-## [31] "Kansas: Sedgwick"           "Louisiana: Unknown"        
-## [33] "Michigan: Kent"             "Michigan: Macomb"          
-## [35] "Michigan: Oakland"          "Michigan: Wayne"           
-## [37] "Minnesota: Hennepin"        "Missouri: St. Louis"       
-## [39] "Nebraska: Douglas"          "Nevada: Clark"             
-## [41] "New Mexico: Bernalillo"     "New York: Nassau"          
-## [43] "New York: New York City"    "New York: Suffolk"         
-## [45] "New York: Westchester"      "Ohio: Hamilton"            
-## [47] "Oklahoma: Oklahoma"         "Pennsylvania: Philadelphia"
-## [49] "Puerto Rico: Unknown"       "Rhode Island: Providence"  
-## [51] "Rhode Island: Unknown"      "South Carolina: Aiken"     
-## [53] "Texas: Anderson"            "Texas: Bexar"              
-## [55] "Texas: Cameron"             "Texas: Collin"             
-## [57] "Texas: Dallas"              "Texas: Denton"             
-## [59] "Texas: El Paso"             "Texas: Guadalupe"          
-## [61] "Texas: Harris"              "Texas: Hidalgo"            
-## [63] "Texas: Nueces"              "Texas: Potter"             
-## [65] "Texas: Tarrant"             "Texas: Williamson"         
-## [67] "Utah: Salt Lake"            "Utah: Utah"                
-## [69] "Wisconsin: Milwaukee"       "Wisconsin: Waukesha"
+##  [7] "California: Riverside"      "California: Sacramento"    
+##  [9] "California: San Bernardino" "California: San Diego"     
+## [11] "Colorado: El Paso"          "Connecticut: Fairfield"    
+## [13] "Connecticut: Hartford"      "Connecticut: New Haven"    
+## [15] "Florida: Broward"           "Florida: Duval"            
+## [17] "Florida: Hillsborough"      "Florida: Lee"              
+## [19] "Florida: Miami-Dade"        "Florida: Orange"           
+## [21] "Florida: Palm Beach"        "Georgia: Cobb"             
+## [23] "Georgia: Fulton"            "Georgia: Gwinnett"         
+## [25] "Georgia: Unknown"           "Illinois: Cook"            
+## [27] "Illinois: DuPage"           "Illinois: Kane"            
+## [29] "Illinois: Lake"             "Illinois: Unknown"         
+## [31] "Illinois: Will"             "Indiana: Marion"           
+## [33] "Kansas: Johnson"            "Kansas: Sedgwick"          
+## [35] "Louisiana: Unknown"         "Massachusetts: Essex"      
+## [37] "Massachusetts: Middlesex"   "Michigan: Chippewa"        
+## [39] "Michigan: Gratiot"          "Michigan: Jackson"         
+## [41] "Michigan: Kent"             "Michigan: Macomb"          
+## [43] "Michigan: Oakland"          "Michigan: Wayne"           
+## [45] "Minnesota: Hennepin"        "Missouri: St. Louis"       
+## [47] "Nebraska: Douglas"          "Nevada: Clark"             
+## [49] "New Jersey: Unknown"        "New Mexico: Bernalillo"    
+## [51] "New York: Nassau"           "New York: New York City"   
+## [53] "New York: Suffolk"          "New York: Westchester"     
+## [55] "North Carolina: Wake"       "Ohio: Cuyahoga"            
+## [57] "Ohio: Franklin"             "Ohio: Hamilton"            
+## [59] "Oklahoma: Oklahoma"         "Oklahoma: Tulsa"           
+## [61] "Pennsylvania: Allegheny"    "Pennsylvania: Philadelphia"
+## [63] "Puerto Rico: Unknown"       "Rhode Island: Kent"        
+## [65] "Rhode Island: Providence"   "Rhode Island: Unknown"     
+## [67] "South Carolina: Aiken"      "Tennessee: Davidson"       
+## [69] "Texas: Anderson"            "Texas: Bexar"              
+## [71] "Texas: Cameron"             "Texas: Collin"             
+## [73] "Texas: Dallas"              "Texas: Denton"             
+## [75] "Texas: El Paso"             "Texas: Guadalupe"          
+## [77] "Texas: Harris"              "Texas: Hidalgo"            
+## [79] "Texas: Nueces"              "Texas: Potter"             
+## [81] "Texas: Tarrant"             "Texas: Williamson"         
+## [83] "Utah: Salt Lake"            "Utah: Utah"                
+## [85] "Washington: King"           "Washington: Snohomish"     
+## [87] "Washington: Spokane"        "Wisconsin: Milwaukee"      
+## [89] "Wisconsin: Waukesha"
 ```
 
 
