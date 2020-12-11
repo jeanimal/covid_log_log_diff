@@ -23,7 +23,7 @@ ui <- fluidPage(
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
   selectInput("geo", "Geo:",
-              c("US", "WORLD", "US_COUNTY")),
+              c("US", "US_DEATHS", "WORLD", "US_COUNTY", "US_COUNTY_DEATHS")),
   selectInput("state", "State/Country/County",
               c("_ALL_")),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
