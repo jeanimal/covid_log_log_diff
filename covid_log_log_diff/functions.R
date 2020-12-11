@@ -1,6 +1,6 @@
 library(dplyr)
 
-# Returns data frame with latest nytimes per state covid data.
+# Returns data frame with latest ecdc data.
 # Output columns include:
 # - date (as a date object)
 # - state (as a string)
@@ -25,11 +25,21 @@ loadCovidPerCountry <- function() {
   arrange(data, state, date)
 }
 
-loadAndFormatNytimesCovidPerState <- function() {
+# Returns data frame with latest nytimes US state covid data.
+# Output columns include:
+# - date (as a date object)
+# - state (as a string)
+# - cases
+# - newCasesPerDay (might be NA)
+# If casesAsDeaths=TRUE than cases are actually deaths.
+loadCovidPerUSState <- function(casesAsDeaths=FALSE) {
   covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
                             sep=",",
                             stringsAsFactors =FALSE)
   covidByState$date <- as.Date(covidByState$date)
+  if (casesAsDeaths) {
+    covidByState$cases <- covidByState$deaths # The hack
+  }
   covidByState2 <- covidByState %>%
     group_by(state) %>%
     arrange(date, .by_group = TRUE) %>%
@@ -38,21 +48,14 @@ loadAndFormatNytimesCovidPerState <- function() {
   covidByState2
 }
 
-loadCovidDeathsPerUSState <- function() {
-  covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
-                            sep=",",
-                            stringsAsFactors =FALSE)
-  covidByState$date <- as.Date(covidByState$date)
-  covidByState$cases <- covidByState$deaths # The hack
-  covidByState2 <- covidByState %>%
-    group_by(state) %>%
-    arrange(date, .by_group = TRUE) %>%
-    mutate(prevDate = lag(date), prevCases = lag(cases))
-  covidByState2$newCasesPerDay <- (covidByState2$cases - covidByState2$prevCases) / as.numeric(covidByState2$date - covidByState2$prevDate)
-  covidByState2
-}
-
-loadCovidPerUSCounty <- function() {
+# Returns data frame with latest nytimes US county covid data.
+# Output columns include:
+# - date (as a date object)
+# - state (as a string)
+# - cases
+# - newCasesPerDay (might be NA)
+# If casesAsDeaths=TRUE than cases are actually deaths.
+loadCovidPerUSCounty <- function(casesAsDeaths=FALSE) {
   data <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
                     sep=",",
                     stringsAsFactors =FALSE)
@@ -66,31 +69,9 @@ loadCovidPerUSCounty <- function() {
   data <- data %>%
     group_by(state) %>%
     filter(n() >= 10)
-  data <- data %>%
-    group_by(state) %>%
-    arrange(date, .by_group = TRUE) %>%
-    mutate(prevDate = lag(date), prevCases = lag(cases))
-  data$newCasesPerDay <- (data$cases - data$prevCases) / as.numeric(data$date - data$prevDate)
-
-  arrange(data, state, date)
-}
-
-# This puts the deaths data in cases so that everything "just works".
-loadCovidDeathsPerUSCounty <- function() {
-  data <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
-                    sep=",",
-                    stringsAsFactors =FALSE)
-  data$date <- as.Date(data$date)
-  # Hack to get this to work quickly: put the county in the state column.
-  # That should make it unique and also it will work in all other functions.
-  # (Save the original state in "us_state")
-  data$us_state <- data$state
-  data$state <- paste0(data$us_state, ": ", data$county)
-  # Only keep counties with > 10 rows of data.
-  data <- data %>%
-    group_by(state) %>%
-    filter(n() >= 10)
-  data$cases <- data$deaths # The hack.
+  if (casesAsDeaths) {
+    data$cases <- data$deaths # The hack
+  }
   data <- data %>%
     group_by(state) %>%
     arrange(date, .by_group = TRUE) %>%
@@ -143,9 +124,9 @@ cleanAndSmooth <- function(covidByState) {
 
 loadCovidDataByGeo <- function(geo) {
   if (geo=="US") {
-    df <- loadAndFormatNytimesCovidPerState()
+    df <- loadCovidPerUSState(casesAsDeaths=FALSE)
   } else if (geo=="US_DEATHS") {
-    df <- loadCovidDeathsPerUSState()
+    df <- loadCovidPerUSState(casesAsDeaths=TRUE)
   } else if (geo=="WORLD") {
     df <- loadCovidPerCountry()
   } else if (geo=="US_COUNTY") {
