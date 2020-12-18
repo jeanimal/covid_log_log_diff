@@ -1,5 +1,8 @@
 library(dplyr)
 
+# DISCONTINUED because the ECDC switched to weekly data on 2020/12/14 and this
+# function has not been updated.
+#
 # Returns data frame with latest ecdc data.
 # Output columns include:
 # - date (as a date object)
@@ -7,6 +10,7 @@ library(dplyr)
 # - cases
 # - newCasesPerDay (might be NA)
 loadCovidPerCountry <- function() {
+  stop("ECDC data not available")
   data <-read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM", stringsAsFactors =FALSE)
   data$date <- ISOdate(data$year, data$month, data$day)
   # Only keep countries with > 10 rows of data.
@@ -130,9 +134,9 @@ loadCovidDataByGeo <- function(geo) {
   } else if (geo=="WORLD") {
     df <- loadCovidPerCountry()
   } else if (geo=="US_COUNTY") {
-    df <- loadCovidPerUSCounty()
+    df <- loadCovidPerUSCounty(casesAsDeaths=FALSE)
   } else if (geo=="US_COUNTY_DEATHS") {
-    df <- loadCovidDeathsPerUSCounty()
+    df <- loadCovidPerUSCounty(casesAsDeaths=TRUE)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }

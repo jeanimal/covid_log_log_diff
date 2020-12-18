@@ -15,7 +15,7 @@ source("functions.R")
 # Pre-load data.
 outputListUS <- loadCovidDataAndBackgroundByGeo("US")
 outputListUSDeaths <- loadCovidDataAndBackgroundByGeo("US_DEATHS")
-outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
+# outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
 outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY")
 outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS")
 
@@ -24,8 +24,8 @@ getOutputListByGeo <- function(geo) {
     return(outputListUS)
   } else if (geo == "US_DEATHS") {
     return(outputListUSDeaths)
-  } else if (geo == "WORLD") {
-    return(outputListWorld)
+#  } else if (geo == "WORLD") {
+#    return(outputListWorld)
   } else if (geo=="US_COUNTY") {
     return(outputListUSCounty)
   } else if (geo=="US_COUNTY_DEATHS") {
