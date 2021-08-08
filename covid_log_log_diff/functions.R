@@ -1,33 +1,9 @@
 library(dplyr)
+library(readr)
 
-# DISCONTINUED because the ECDC switched to weekly data on 2020/12/14 and this
-# function has not been updated.
-#
-# Returns data frame with latest ecdc data.
-# Output columns include:
-# - date (as a date object)
-# - state (as a string)
-# - cases
-# - newCasesPerDay (might be NA)
-loadCovidPerCountry <- function() {
-  stop("ECDC data not available")
-  data <-read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM", stringsAsFactors =FALSE)
-  data$date <- ISOdate(data$year, data$month, data$day)
-  # Only keep countries with > 10 rows of data.
-  data <- data %>%
-    group_by(geoId) %>%
-    filter(n() >= 10)
-  # Their 'cases' column is actually new cases.
-  data$newCasesPerDay <- data$cases
-  data <- data %>%
-    group_by(geoId) %>%
-    arrange(date, .by_group = TRUE) %>%
-    mutate(totalCases = cumsum(newCasesPerDay))
-  data$cases <- data$totalCases
-  data$fips <- data$geoId
-  data$state <- data$countriesAndTerritories
-  arrange(data, state, date)
-}
+# DISCONTINUED loadCovidPerCountry because the ECDC switched to weekly data on 2020/12/14
+# Previous source: "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
+# Maybe I can resurrect this later.
 
 # Returns data frame with latest nytimes US state covid data.
 # Output columns include:
@@ -37,9 +13,7 @@ loadCovidPerCountry <- function() {
 # - newCasesPerDay (might be NA)
 # If casesAsDeaths=TRUE than cases are actually deaths.
 loadCovidPerUSState <- function(casesAsDeaths=FALSE) {
-  covidByState <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv', 
-                            sep=",",
-                            stringsAsFactors =FALSE)
+  covidByState <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
   covidByState$date <- as.Date(covidByState$date)
   if (casesAsDeaths) {
     covidByState$cases <- covidByState$deaths # The hack
@@ -60,9 +34,7 @@ loadCovidPerUSState <- function(casesAsDeaths=FALSE) {
 # - newCasesPerDay (might be NA)
 # If casesAsDeaths=TRUE than cases are actually deaths.
 loadCovidPerUSCounty <- function(casesAsDeaths=FALSE) {
-  data <- read.csv2('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
-                    sep=",",
-                    stringsAsFactors =FALSE)
+  data <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
   data$date <- as.Date(data$date)
   # Hack to get this to work quickly: put the county in the state column.
   # That should make it unique and also it will work in all other functions.
