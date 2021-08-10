@@ -65,7 +65,9 @@ loadCovidPerUSCounty <- function(casesAsDeaths=FALSE) {
 # - cases
 # - newCasesPerDay
 # - deaths
-cleanAndSmooth <- function(covidByState) {
+# Argument loess_span controls the amount of smoothing in the loess function.
+# 0 means use no points, 1.0 means to use all points (weighted).
+cleanAndSmooth <- function(covidByState, loess_span) {
   covidByState<-covidByState %>%
     dplyr::filter(!is.na(newCasesPerDay),
                   !is.na(cases),
@@ -93,12 +95,13 @@ cleanAndSmooth <- function(covidByState) {
   #  filter(!(state %in% c("Northern Mariana Islands","Virgin Islands","Guam"))) %>%
     group_by(state) %>%
     do(data.frame(.,
-                  smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = .), .))) %>%
+                  smoothed = 10^predict(loess(log10(newCasesPerDay) ~ log10(cases), data = ., span=loess_span), .))) %>%
     ungroup()
   covidByStateSmoothed
 }
 
-loadCovidDataByGeo <- function(geo) {
+# Argument loess_span controls the amount of smoothing in the loess function.
+loadCovidDataByGeo <- function(geo, loess_span) {
   if (geo=="US") {
     df <- loadCovidPerUSState(casesAsDeaths=FALSE)
   } else if (geo=="US_DEATHS") {
@@ -112,19 +115,24 @@ loadCovidDataByGeo <- function(geo) {
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }
-  cleanAndSmooth(df)
+  cleanAndSmooth(df, loess_span)
 }
 
-loadCovidDataAndBackgroundByGeo <- function(geo) {
+# Given a string indicating geography graunularity (and possibly data type),
+# return a list of a cleaned covid data frame and background state names.
+# list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_states)
+#
+# Argument loess_span controls the amount of smoothing in the loess function.
+loadCovidDataAndBackgroundByGeo <- function(geo, loess_span=0.2) {
   if (geo=="US" || geo=="US_DEATHS") {
     background_states <- c("_ALL_", "New York", "California", "Michigan", "Louisiana", "Florida")
-    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_states)
+    list(covidByGeo=loadCovidDataByGeo(geo, loess_span), background_geos=background_states)
   } else if (geo=="WORLD") {
     background_geos <- c("_ALL_", "Italy", "Germany", "South_Korea", "United_Kingdom", "United_States_of_America", "Brazil")
-    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_geos)
+    list(covidByGeo=loadCovidDataByGeo(geo, loess_span), background_geos=background_geos)
   } else if (geo=="US_COUNTY" || geo=="US_COUNTY_DEATHS") {
     background_geos <- c("_ALL_", "New York: New York City")
-    list(covidByGeo=loadCovidDataByGeo(geo), background_geos=background_geos)
+    list(covidByGeo=loadCovidDataByGeo(geo, loess_span), background_geos=background_geos)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }

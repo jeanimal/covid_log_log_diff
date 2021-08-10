@@ -13,11 +13,13 @@ library(scales)
 source("functions.R")
 
 # Pre-load data.
-outputListUS <- loadCovidDataAndBackgroundByGeo("US")
-outputListUSDeaths <- loadCovidDataAndBackgroundByGeo("US_DEATHS")
+# The number is the degree of loess smoothing, which can range from 0 to 1 (most smooth).
+# The values were manually tuned by looking at graphs of Florida data.
+outputListUS <- loadCovidDataAndBackgroundByGeo("US", 0.2)
+outputListUSDeaths <- loadCovidDataAndBackgroundByGeo("US_DEATHS", 0.3)
 # outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
-outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY")
-outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS")
+outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY", 0.5)
+outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS", 0.6)
 
 getOutputListByGeo <- function(geo) {
   if (geo == "US") {
