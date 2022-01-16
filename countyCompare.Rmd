@@ -35,7 +35,7 @@ source('covid_log_log_diff/functions.R')
 ## Loading data
 
 ```{r covid-cases-by-us-county}
-covidByCounty <- loadCovidDataByGeo("US_COUNTY")
+covidByCounty <- loadCovidDataByGeo("US_COUNTY", 1.0)
 ```
 
 ## Steep increase counties

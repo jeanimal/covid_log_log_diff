@@ -18,8 +18,8 @@ source("functions.R")
 outputListUS <- loadCovidDataAndBackgroundByGeo("US", 0.2)
 outputListUSDeaths <- loadCovidDataAndBackgroundByGeo("US_DEATHS", 0.3)
 # outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
-outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY", 0.5)
-outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS", 0.6)
+outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY", 1.0)
+outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS", 1.0)
 
 getOutputListByGeo <- function(geo) {
   if (geo == "US") {
