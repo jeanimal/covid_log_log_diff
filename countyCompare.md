@@ -22,36 +22,20 @@ as granular as I'd like but better than state level data.
 
 
 ```
-## ── Attaching packages ────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
 ```
 
 ```
-## ✓ ggplot2 3.3.2     ✓ purrr   0.3.3
-## ✓ tibble  3.0.4     ✓ dplyr   0.8.5
-## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.5.0
+## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.3     ✓ dplyr   1.0.7
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.1.1     ✓ forcats 0.5.1
 ```
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.6.2
-```
-
-```
-## Warning: package 'tibble' was built under R version 3.6.2
-```
-
-```
-## Warning: package 'tidyr' was built under R version 3.6.2
-```
-
-```
-## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
-```
-
-```
-## Warning: package 'scales' was built under R version 3.6.2
 ```
 
 ```
@@ -75,7 +59,25 @@ as granular as I'd like but better than state level data.
 
 
 ```r
-covidByCounty <- loadCovidDataByGeo("US_COUNTY")
+covidByCounty <- loadCovidDataByGeo("US_COUNTY", 1.0)
+```
+
+```
+## Rows: 2122136 Columns: 6
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr  (3): county, state, fips
+## dbl  (2): cases, deaths
+## date (1): date
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ## Steep increase counties
@@ -83,73 +85,37 @@ covidByCounty <- loadCovidDataByGeo("US_COUNTY")
 Counties that ever hit 1,000 new cases per day.
 
 ```r
-steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 1000) %>% dplyr::filter(state != "_ALL_")
+steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 10000) %>% dplyr::filter(state != "_ALL_")
 steepIncreaseNames <- unique(steepIncrease$state)
 steepIncreaseNames
 ```
 
 ```
-##   [1] "Alabama: Mobile"             "Alabama: Tuscaloosa"        
-##   [3] "Arizona: Maricopa"           "Arizona: Pima"              
-##   [5] "Arizona: Yuma"               "California: Alameda"        
-##   [7] "California: Contra Costa"    "California: Fresno"         
-##   [9] "California: Kern"            "California: Los Angeles"    
-##  [11] "California: Monterey"        "California: Orange"         
-##  [13] "California: Riverside"       "California: Sacramento"     
-##  [15] "California: San Bernardino"  "California: San Diego"      
-##  [17] "California: San Joaquin"     "California: Santa Clara"    
-##  [19] "California: Solano"          "California: Stanislaus"     
-##  [21] "California: Ventura"         "Colorado: El Paso"          
-##  [23] "Connecticut: Fairfield"      "Connecticut: Hartford"      
-##  [25] "Connecticut: New Haven"      "Florida: Broward"           
-##  [27] "Florida: Duval"              "Florida: Hillsborough"      
-##  [29] "Florida: Lee"                "Florida: Miami-Dade"        
-##  [31] "Florida: Orange"             "Florida: Palm Beach"        
-##  [33] "Florida: Pinellas"           "Florida: Polk"              
-##  [35] "Georgia: Cobb"               "Georgia: Fulton"            
-##  [37] "Georgia: Gwinnett"           "Georgia: Unknown"           
-##  [39] "Illinois: Cook"              "Illinois: DuPage"           
-##  [41] "Illinois: Kane"              "Illinois: Lake"             
-##  [43] "Illinois: Unknown"           "Illinois: Will"             
-##  [45] "Indiana: Marion"             "Kansas: Johnson"            
-##  [47] "Kansas: Sedgwick"            "Louisiana: Unknown"         
-##  [49] "Massachusetts: Bristol"      "Massachusetts: Essex"       
-##  [51] "Massachusetts: Middlesex"    "Massachusetts: Suffolk"     
-##  [53] "Massachusetts: Worcester"    "Michigan: Chippewa"         
-##  [55] "Michigan: Gratiot"           "Michigan: Jackson"          
-##  [57] "Michigan: Kent"              "Michigan: Macomb"           
-##  [59] "Michigan: Oakland"           "Michigan: Wayne"            
-##  [61] "Minnesota: Hennepin"         "Missouri: St. Louis"        
-##  [63] "Nebraska: Douglas"           "Nevada: Clark"              
-##  [65] "New Jersey: Unknown"         "New Mexico: Bernalillo"     
-##  [67] "New York: Nassau"            "New York: New York City"    
-##  [69] "New York: Suffolk"           "New York: Westchester"      
-##  [71] "North Carolina: Mecklenburg" "North Carolina: Wake"       
-##  [73] "North Dakota: Unknown"       "Ohio: Cuyahoga"             
-##  [75] "Ohio: Franklin"              "Ohio: Hamilton"             
-##  [77] "Ohio: Lorain"                "Ohio: Summit"               
-##  [79] "Oklahoma: Oklahoma"          "Oklahoma: Tulsa"            
-##  [81] "Pennsylvania: Allegheny"     "Pennsylvania: Philadelphia" 
-##  [83] "Puerto Rico: Unknown"        "Rhode Island: Kent"         
-##  [85] "Rhode Island: Providence"    "Rhode Island: Unknown"      
-##  [87] "South Carolina: Aiken"       "South Carolina: Greenville" 
-##  [89] "Tennessee: Davidson"         "Tennessee: Shelby"          
-##  [91] "Tennessee: Unknown"          "Texas: Anderson"            
-##  [93] "Texas: Bexar"                "Texas: Brazoria"            
-##  [95] "Texas: Cameron"              "Texas: Collin"              
-##  [97] "Texas: Dallas"               "Texas: Denton"              
-##  [99] "Texas: El Paso"              "Texas: Ellis"               
-## [101] "Texas: Fort Bend"            "Texas: Guadalupe"           
-## [103] "Texas: Harris"               "Texas: Hidalgo"             
-## [105] "Texas: Howard"               "Texas: Midland"             
-## [107] "Texas: Montgomery"           "Texas: Nueces"              
-## [109] "Texas: Orange"               "Texas: Parker"              
-## [111] "Texas: Potter"               "Texas: Tarrant"             
-## [113] "Texas: Travis"               "Texas: Williamson"          
-## [115] "Utah: Salt Lake"             "Utah: Utah"                 
-## [117] "Utah: Weber"                 "Washington: King"           
-## [119] "Washington: Snohomish"       "Washington: Spokane"        
-## [121] "Wisconsin: Milwaukee"        "Wisconsin: Waukesha"
+##  [1] "Arizona: Maricopa"          "California: Alameda"       
+##  [3] "California: Los Angeles"    "California: Orange"        
+##  [5] "California: Riverside"      "California: Sacramento"    
+##  [7] "California: San Bernardino" "California: San Diego"     
+##  [9] "California: Santa Clara"    "Connecticut: Fairfield"    
+## [11] "Florida: Brevard"           "Florida: Broward"          
+## [13] "Florida: Duval"             "Florida: Hillsborough"     
+## [15] "Florida: Lee"               "Florida: Miami-Dade"       
+## [17] "Florida: Orange"            "Florida: Palm Beach"       
+## [19] "Florida: Pinellas"          "Florida: Polk"             
+## [21] "Florida: Unknown"           "Georgia: Unknown"          
+## [23] "Illinois: Cook"             "Iowa: Unknown"             
+## [25] "Louisiana: Unknown"         "Maryland: Baltimore"       
+## [27] "Maryland: Baltimore city"   "Maryland: Montgomery"      
+## [29] "Maryland: Prince George's"  "Maryland: Unknown"         
+## [31] "Massachusetts: Middlesex"   "Michigan: Oakland"         
+## [33] "Michigan: Wayne"            "Nevada: Clark"             
+## [35] "New York: New York City"    "North Carolina: Wake"      
+## [37] "Oklahoma: Oklahoma"         "Oklahoma: Unknown"         
+## [39] "Rhode Island: Providence"   "Rhode Island: Unknown"     
+## [41] "Tennessee: Unknown"         "Texas: Bexar"              
+## [43] "Texas: Dallas"              "Texas: Harris"             
+## [45] "Texas: Hidalgo"             "Texas: Tarrant"            
+## [47] "Texas: Travis"              "Utah: Salt Lake"           
+## [49] "Washington: King"
 ```
 
 

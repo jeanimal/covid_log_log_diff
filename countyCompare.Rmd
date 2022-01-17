@@ -42,7 +42,7 @@ covidByCounty <- loadCovidDataByGeo("US_COUNTY", 1.0)
 
 Counties that ever hit 1,000 new cases per day.
 ```{r}
-steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 1000) %>% dplyr::filter(state != "_ALL_")
+steepIncrease <- covidByCounty %>% dplyr::filter(newCasesPerDay > 10000) %>% dplyr::filter(state != "_ALL_")
 steepIncreaseNames <- unique(steepIncrease$state)
 steepIncreaseNames
 ```
