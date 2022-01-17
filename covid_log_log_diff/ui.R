@@ -22,9 +22,9 @@ ui <- fluidPage(
   helpText(a("How To Tell If We're Beating COVID-19", target="_blank",
              href="https://www.youtube.com/watch?v=54XLXg4fYsc&fbclid=IwAR1WWk6EBv84psWs_Bw83JsuRQlbI615gAk94CSpit-U3ywNEUDxC1WpcdY")
            ),
-  selectInput("geo", "Geo:",
+  selectInput("geo", "Cases or deaths:",
               c("US", "US_DEATHS")),
-  selectInput("state", "State/County",
+  selectInput("state", "State",
               c("_ALL_")),
   plotlyOutput("plot1", width = "auto", height = "auto", inline = TRUE)  %>% withSpinner(color="#0dc5c1"),
   hr(),
