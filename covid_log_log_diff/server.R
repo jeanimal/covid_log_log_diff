@@ -18,8 +18,8 @@ source("functions.R")
 outputListUS <- loadCovidDataAndBackgroundByGeo("US", 0.2)
 outputListUSDeaths <- loadCovidDataAndBackgroundByGeo("US_DEATHS", 0.3)
 # outputListWorld <- loadCovidDataAndBackgroundByGeo("WORLD")
-outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY", 1.0)
-outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS", 1.0)
+# outputListUSCounty <- loadCovidDataAndBackgroundByGeo("US_COUNTY", 1.0)
+# outputListUSCountyDeaths <- loadCovidDataAndBackgroundByGeo("US_COUNTY_DEATHS", 1.0)
 
 getOutputListByGeo <- function(geo) {
   if (geo == "US") {
@@ -28,10 +28,10 @@ getOutputListByGeo <- function(geo) {
     return(outputListUSDeaths)
 #  } else if (geo == "WORLD") {
 #    return(outputListWorld)
-  } else if (geo=="US_COUNTY") {
-    return(outputListUSCounty)
-  } else if (geo=="US_COUNTY_DEATHS") {
-    return(outputListUSCountyDeaths)
+#  } else if (geo=="US_COUNTY") {
+#    return(outputListUSCounty)
+#  } else if (geo=="US_COUNTY_DEATHS") {
+#    return(outputListUSCountyDeaths)
   } else {
     stop(paste0("Unrecognized geo: ", geo))
   }
