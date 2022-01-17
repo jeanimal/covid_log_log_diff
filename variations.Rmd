@@ -24,7 +24,7 @@ source('covid_log_log_diff/functions.R')
 ```
 
 ```{r prep-data-frames}
-covidByState <- loadAndFormatNytimesCovidPerState()
+covidByState <- loadCovidPerUSState()
 
 covidByState<-covidByState %>% 
   dplyr::filter(!is.na(newCasesPerDay), 
